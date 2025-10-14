@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react"
+import {  Clock3, TrendingUp, TrendingUpDown} from "lucide-react";
+
 
 interface CampanasViewProps {
   subSection: string
@@ -16,35 +18,61 @@ export function CampanasView({ subSection }: CampanasViewProps) {
   const renderActivacionesContent = () => {
     return (
       <div className="p-6">
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-foreground mb-1">Activaciones</h2>
-          <p className="text-sm text-muted-foreground">Gestión de campaña Activaciones</p>
-        </div>
-
-        <Tabs defaultValue="dia-actual" className="w-full">
-          <TabsList className="mb-6">
-            <TabsTrigger value="dia-actual">Día Actual</TabsTrigger>
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="descargas">Descargas</TabsTrigger>
-          </TabsList>
-
+        
+          <Tabs defaultValue="dia-actual" className="w-full">
+            <div className="flex justify-center">
+              <TabsList className="mb-6 flex justify-center space-x-2 rounded-lg p-1">
+                <TabsTrigger value="dia-actual" className="px-8 py-2">Día Actual</TabsTrigger>
+                <TabsTrigger value="dashboard" className="px-8 py-2">Dashboard</TabsTrigger>
+                <TabsTrigger value="descargas" className="px-8 py-2">Descargas</TabsTrigger>
+              </TabsList>
+            </div>
           <TabsContent value="dia-actual" className="space-y-6">
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold text-foreground mb-1 text-center">Métricas del Día Actual</h2>
+              <p className="text-sm text-muted-foreground text-center">Indicadores en tiempo real del call center</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="p-4">
-                <p className="text-sm text-muted-foreground">Gestiones Hoy</p>
-                <p className="text-2xl font-bold text-foreground mt-2">156</p>
+              <Card className="p-4 flex flex-col justify-between">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-sm text-muted-foreground">TMO</p>
+                    <p className="text-sm text-muted-foreground">Tiempo medio de operación</p>
+                  </div>
+                  <Clock3 className="w-5 h-5 text-blue-500" />
+                </div>
+                <p className="text-2xl font-bold text-foreground mt-2">05:32</p>
               </Card>
-              <Card className="p-4">
-                <p className="text-sm text-muted-foreground">Efectividad</p>
-                <p className="text-2xl font-bold text-foreground mt-2">92%</p>
+              <Card className="p-4 flex flex-col justify-between">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-sm text-muted-foreground">TME</p>
+                    <p className="text-sm text-muted-foreground">Tiempo medio de espera</p>
+                  </div>
+                  <Clock3 className="w-5 h-5 text-blue-500" />
+                </div>
+                <p className="text-2xl font-bold text-foreground mt-2">01:45</p>
               </Card>
-              <Card className="p-4">
-                <p className="text-sm text-muted-foreground">En Proceso</p>
-                <p className="text-2xl font-bold text-foreground mt-2">23</p>
+              <Card className="p-4 flex flex-col justify-between">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Casos del día</p>
+                    <p className="text-sm text-muted-foreground">Total procesado</p>
+                  </div>
+                  <TrendingUp className="w-5 h-5 text-blue-500" />
+                </div>
+                <p className="text-2xl font-bold text-foreground mt-2">342</p>
               </Card>
-              <Card className="p-4">
-                <p className="text-sm text-muted-foreground">Completadas</p>
-                <p className="text-2xl font-bold text-foreground mt-2">133</p>
+              <Card className="p-4 flex flex-col justify-between">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Promedio Diario</p>
+                    <p className="text-sm text-muted-foreground">Últimos 30 días</p>
+                  </div>
+                  <TrendingUpDown className="w-5 h-5 text-blue-500" />
+                </div>
+                <p className="text-2xl font-bold text-foreground mt-2">298</p>
+                <p className="text-sm text-foreground -mt-5">casos/día</p>
               </Card>
             </div>
 
