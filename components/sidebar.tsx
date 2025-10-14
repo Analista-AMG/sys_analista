@@ -48,10 +48,9 @@ const menuItems = [
     label: "Analistas",
     icon: Users,
     subItems: [
-      { id: "lista", label: "Lista de Analistas" },
-      { id: "rendimiento", label: "Rendimiento" },
-      { id: "horarios", label: "Horarios" },
       { id: "conexiones", label: "Conexiones" },
+      { id: "campanas", label: "Campañas" },
+      { id: "scraping", label: "Scraping" },
     ],
   },
   {

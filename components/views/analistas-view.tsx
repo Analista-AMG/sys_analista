@@ -2,9 +2,9 @@
 
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { User, Clock, CheckCircle, XCircle, Activity } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react"
 
 interface AnalistasViewProps {
@@ -12,117 +12,34 @@ interface AnalistasViewProps {
 }
 
 export function AnalistasView({ subSection }: AnalistasViewProps) {
-  const [activeTab, setActiveTab] = useState("salesys")
-
-  if (subSection === "lista") {
-    return (
-      <div className="p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-foreground mb-1">Lista de Analistas</h2>
-            <p className="text-sm text-muted-foreground">Gestión de analistas del sistema</p>
-          </div>
-          <Button>Agregar Analista</Button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i} className="p-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-foreground">Analista {i}</h3>
-                  <p className="text-sm text-muted-foreground">analista{i}@sys.com</p>
-                  <div className="flex items-center gap-2 mt-3">
-                    <Badge variant={i % 2 === 0 ? "default" : "secondary"}>
-                      {i % 2 === 0 ? "Activo" : "Disponible"}
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    )
+  const getDefaultDates = () => {
+    const today = new Date()
+    const yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - 1)
+    return yesterday.toISOString().split("T")[0]
   }
 
-  if (subSection === "rendimiento") {
-    return (
-      <div className="p-6 space-y-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-foreground mb-1">Rendimiento</h2>
-          <p className="text-sm text-muted-foreground">Métricas de rendimiento de analistas</p>
-        </div>
+  const [fechaInicio, setFechaInicio] = useState(getDefaultDates())
+  const [fechaFin, setFechaFin] = useState(getDefaultDates())
+  const [sistemaSeleccionado, setSistemaSeleccionado] = useState("")
+  const [consoleLogs, setConsoleLogs] = useState<string[]>([])
 
-        <div className="space-y-4">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Card key={i} className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">Analista {i}</h3>
-                    <p className="text-sm text-muted-foreground">Campaña: Activaciones</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-6">
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Gestiones</p>
-                    <p className="text-lg font-bold text-foreground">{20 + i * 5}</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Efectividad</p>
-                    <p className="text-lg font-bold text-foreground">{80 + i}%</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Tiempo Prom.</p>
-                    <p className="text-lg font-bold text-foreground">{5 + i} min</p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    )
+  const addLog = (message: string) => {
+    const timestamp = new Date().toLocaleTimeString()
+    setConsoleLogs((prev) => [...prev, `[${timestamp}] ${message}`])
   }
 
-  if (subSection === "horarios") {
-    return (
-      <div className="p-6 space-y-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-foreground mb-1">Horarios</h2>
-          <p className="text-sm text-muted-foreground">Gestión de horarios de analistas</p>
-        </div>
-
-        <Card className="p-6">
-          <div className="space-y-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">Analista {i}</h3>
-                    <p className="text-sm text-muted-foreground">Turno: Mañana</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm text-foreground">08:00 - 16:00</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-    )
+  const getSystemButtons = () => {
+    switch (sistemaSeleccionado) {
+      case "salesys":
+        return ["General", "Agaso"]
+      case "genesys":
+        return ["General", "Detallado"]
+      case "ipcc":
+        return ["Reporte 1", "Reporte 2", "Soporte"]
+      default:
+        return []
+    }
   }
 
   if (subSection === "conexiones") {
@@ -130,133 +47,151 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
       <div className="p-6 space-y-6">
         <div>
           <h2 className="text-2xl font-semibold text-foreground mb-1">Conexiones</h2>
-          <p className="text-sm text-muted-foreground">Estado de conexiones a sistemas externos</p>
+          <p className="text-sm text-muted-foreground">Consulta de conexiones por rango de fechas</p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="salesys">SaleSys</TabsTrigger>
-            <TabsTrigger value="genesys">Genesys</TabsTrigger>
-            <TabsTrigger value="ipcc">IPCC</TabsTrigger>
-          </TabsList>
+        <Card className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="space-y-2">
+              <Label htmlFor="fecha-inicio">Fecha Inicio</Label>
+              <Input
+                id="fecha-inicio"
+                type="date"
+                value={fechaInicio}
+                onChange={(e) => setFechaInicio(e.target.value)}
+              />
+            </div>
 
-          <TabsContent value="salesys" className="space-y-4 mt-6">
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                    <Activity className="w-6 h-6 text-blue-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground">SaleSys</h3>
-                    <p className="text-sm text-muted-foreground">Sistema de gestión de ventas</p>
-                  </div>
-                </div>
-                <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
-                  <CheckCircle className="w-3 h-3 mr-1" />
-                  Conectado
-                </Badge>
+            <div className="space-y-2">
+              <Label htmlFor="fecha-fin">Fecha Fin</Label>
+              <Input id="fecha-fin" type="date" value={fechaFin} onChange={(e) => setFechaFin(e.target.value)} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="sistema">Sistema</Label>
+              <Select value={sistemaSeleccionado} onValueChange={setSistemaSeleccionado}>
+                <SelectTrigger id="sistema">
+                  <SelectValue placeholder="Seleccionar sistema" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="salesys">SaleSys</SelectItem>
+                  <SelectItem value="genesys">Genesys</SelectItem>
+                  <SelectItem value="ipcc">IPCC</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {sistemaSeleccionado && (
+            <div className="mb-6">
+              <Label className="mb-3 block">Opciones de Reporte</Label>
+              <div className="flex flex-wrap gap-3">
+                {getSystemButtons().map((buttonName) => (
+                  <Button
+                    key={buttonName}
+                    onClick={() =>
+                      addLog(
+                        `Botón presionado: ${buttonName} - Sistema: ${sistemaSeleccionado.toUpperCase()} - Período: ${fechaInicio} al ${fechaFin}`,
+                      )
+                    }
+                    variant="outline"
+                  >
+                    {buttonName}
+                  </Button>
+                ))}
               </div>
+            </div>
+          )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Estado del Servidor</p>
-                  <p className="text-lg font-semibold text-foreground">Operativo</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Última Sincronización</p>
-                  <p className="text-lg font-semibold text-foreground">Hace 2 min</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Usuarios Conectados</p>
-                  <p className="text-lg font-semibold text-foreground">24</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Latencia</p>
-                  <p className="text-lg font-semibold text-foreground">45 ms</p>
-                </div>
+          {sistemaSeleccionado && (
+            <div className="mt-6">
+              <Label className="mb-2 block">Consola de Eventos</Label>
+              <div className="bg-black text-green-400 font-mono text-sm p-4 rounded-lg h-64 overflow-y-auto">
+                {consoleLogs.length === 0 ? (
+                  <div className="text-gray-500">Esperando eventos...</div>
+                ) : (
+                  consoleLogs.map((log, index) => (
+                    <div key={index} className="mb-1">
+                      {log}
+                    </div>
+                  ))
+                )}
               </div>
-            </Card>
-          </TabsContent>
+            </div>
+          )}
+        </Card>
+      </div>
+    )
+  }
 
-          <TabsContent value="genesys" className="space-y-4 mt-6">
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
-                    <Activity className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground">Genesys</h3>
-                    <p className="text-sm text-muted-foreground">Plataforma de contact center</p>
-                  </div>
-                </div>
-                <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
-                  <CheckCircle className="w-3 h-3 mr-1" />
-                  Conectado
-                </Badge>
-              </div>
+  if (subSection === "campanas") {
+    return (
+      <div className="p-6 space-y-6">
+        <div>
+          <h2 className="text-2xl font-semibold text-foreground mb-1">Campañas de Analistas</h2>
+          <p className="text-sm text-muted-foreground">Gestión de campañas asignadas a analistas</p>
+        </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Estado del Servidor</p>
-                  <p className="text-lg font-semibold text-foreground">Operativo</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {["Activaciones", "Aghaso", "Delivery", "Foto Corporativo", "Foto Alambrico", "NPS"].map((campana, i) => (
+            <Card key={i} className="p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-2">{campana}</h3>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Analistas asignados:</span>
+                  <span className="font-semibold text-foreground">{5 + i}</span>
                 </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Última Sincronización</p>
-                  <p className="text-lg font-semibold text-foreground">Hace 1 min</p>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Gestiones hoy:</span>
+                  <span className="font-semibold text-foreground">{120 + i * 20}</span>
                 </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Agentes Activos</p>
-                  <p className="text-lg font-semibold text-foreground">18</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Llamadas en Cola</p>
-                  <p className="text-lg font-semibold text-foreground">3</p>
-                </div>
-              </div>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="ipcc" className="space-y-4 mt-6">
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center">
-                    <Activity className="w-6 h-6 text-orange-500" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground">IPCC</h3>
-                    <p className="text-sm text-muted-foreground">Sistema de telefonía IP</p>
-                  </div>
-                </div>
-                <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">
-                  <XCircle className="w-3 h-3 mr-1" />
-                  Reconectando
-                </Badge>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Estado del Servidor</p>
-                  <p className="text-lg font-semibold text-foreground">Reiniciando</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Última Sincronización</p>
-                  <p className="text-lg font-semibold text-foreground">Hace 15 min</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Líneas Disponibles</p>
-                  <p className="text-lg font-semibold text-foreground">12/15</p>
-                </div>
-                <div className="p-4 bg-secondary/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Intentos de Reconexión</p>
-                  <p className="text-lg font-semibold text-foreground">2</p>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Efectividad:</span>
+                  <span className="font-semibold text-foreground">{75 + i}%</span>
                 </div>
               </div>
             </Card>
-          </TabsContent>
-        </Tabs>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (subSection === "scraping") {
+    return (
+      <div className="p-6 space-y-6">
+        <div>
+          <h2 className="text-2xl font-semibold text-foreground mb-1">Scraping</h2>
+          <p className="text-sm text-muted-foreground">Extracción y procesamiento de datos</p>
+        </div>
+
+        <Card className="p-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
+              <div>
+                <h3 className="font-semibold text-foreground">Scraping de Gestiones</h3>
+                <p className="text-sm text-muted-foreground">Última ejecución: Hace 30 minutos</p>
+              </div>
+              <Button>Ejecutar</Button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
+              <div>
+                <h3 className="font-semibold text-foreground">Scraping de Clientes</h3>
+                <p className="text-sm text-muted-foreground">Última ejecución: Hace 1 hora</p>
+              </div>
+              <Button>Ejecutar</Button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
+              <div>
+                <h3 className="font-semibold text-foreground">Scraping de Métricas</h3>
+                <p className="text-sm text-muted-foreground">Última ejecución: Hace 2 horas</p>
+              </div>
+              <Button>Ejecutar</Button>
+            </div>
+          </div>
+        </Card>
       </div>
     )
   }
