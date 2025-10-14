@@ -10,6 +10,20 @@ export function CallCenterLayout() {
   const [openTabs, setOpenTabs] = useState<Array<{ section: string; subSection: string; id: string }>>([])
 
   const handleNavigate = (section: string, subSection: string) => {
+    // For inicio, we don't use subsections
+    if (section === "inicio") {
+      setActiveSection(section)
+      setActiveSubSection("main")
+
+      const tabId = `${section}-main`
+      const existingTab = openTabs.find((tab) => tab.id === tabId)
+
+      if (!existingTab) {
+        setOpenTabs([...openTabs, { section, subSection: "main", id: tabId }])
+      }
+      return
+    }
+
     const tabId = `${section}-${subSection}`
     const existingTab = openTabs.find((tab) => tab.id === tabId)
 
@@ -43,6 +57,10 @@ export function CallCenterLayout() {
     setActiveSubSection(subSection)
   }
 
+  const handleOpenCampaign = (campaignId: string) => {
+    handleNavigate("campanas", campaignId)
+  }
+
   return (
     <div className="flex h-screen bg-background">
       <Sidebar activeSection={activeSection} activeSubSection={activeSubSection} onNavigate={handleNavigate} />
@@ -52,6 +70,7 @@ export function CallCenterLayout() {
         openTabs={openTabs}
         onCloseTab={handleCloseTab}
         onTabClick={handleTabClick}
+        onOpenCampaign={handleOpenCampaign} // Ensure this prop is used in MainContent if needed
       />
     </div>
   )

@@ -3,13 +3,17 @@
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { User, Clock } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { User, Clock, CheckCircle, XCircle, Activity } from "lucide-react"
+import { useState } from "react"
 
 interface AnalistasViewProps {
   subSection: string
 }
 
 export function AnalistasView({ subSection }: AnalistasViewProps) {
+  const [activeTab, setActiveTab] = useState("salesys")
+
   if (subSection === "lista") {
     return (
       <div className="p-6 space-y-6">
@@ -117,6 +121,142 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
             ))}
           </div>
         </Card>
+      </div>
+    )
+  }
+
+  if (subSection === "conexiones") {
+    return (
+      <div className="p-6 space-y-6">
+        <div>
+          <h2 className="text-2xl font-semibold text-foreground mb-1">Conexiones</h2>
+          <p className="text-sm text-muted-foreground">Estado de conexiones a sistemas externos</p>
+        </div>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="salesys">SaleSys</TabsTrigger>
+            <TabsTrigger value="genesys">Genesys</TabsTrigger>
+            <TabsTrigger value="ipcc">IPCC</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="salesys" className="space-y-4 mt-6">
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                    <Activity className="w-6 h-6 text-blue-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">SaleSys</h3>
+                    <p className="text-sm text-muted-foreground">Sistema de gestión de ventas</p>
+                  </div>
+                </div>
+                <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                  <CheckCircle className="w-3 h-3 mr-1" />
+                  Conectado
+                </Badge>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Estado del Servidor</p>
+                  <p className="text-lg font-semibold text-foreground">Operativo</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Última Sincronización</p>
+                  <p className="text-lg font-semibold text-foreground">Hace 2 min</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Usuarios Conectados</p>
+                  <p className="text-lg font-semibold text-foreground">24</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Latencia</p>
+                  <p className="text-lg font-semibold text-foreground">45 ms</p>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="genesys" className="space-y-4 mt-6">
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center">
+                    <Activity className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">Genesys</h3>
+                    <p className="text-sm text-muted-foreground">Plataforma de contact center</p>
+                  </div>
+                </div>
+                <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                  <CheckCircle className="w-3 h-3 mr-1" />
+                  Conectado
+                </Badge>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Estado del Servidor</p>
+                  <p className="text-lg font-semibold text-foreground">Operativo</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Última Sincronización</p>
+                  <p className="text-lg font-semibold text-foreground">Hace 1 min</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Agentes Activos</p>
+                  <p className="text-lg font-semibold text-foreground">18</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Llamadas en Cola</p>
+                  <p className="text-lg font-semibold text-foreground">3</p>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="ipcc" className="space-y-4 mt-6">
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center">
+                    <Activity className="w-6 h-6 text-orange-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">IPCC</h3>
+                    <p className="text-sm text-muted-foreground">Sistema de telefonía IP</p>
+                  </div>
+                </div>
+                <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">
+                  <XCircle className="w-3 h-3 mr-1" />
+                  Reconectando
+                </Badge>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Estado del Servidor</p>
+                  <p className="text-lg font-semibold text-foreground">Reiniciando</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Última Sincronización</p>
+                  <p className="text-lg font-semibold text-foreground">Hace 15 min</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Líneas Disponibles</p>
+                  <p className="text-lg font-semibold text-foreground">12/15</p>
+                </div>
+                <div className="p-4 bg-secondary/50 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Intentos de Reconexión</p>
+                  <p className="text-lg font-semibold text-foreground">2</p>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     )
   }

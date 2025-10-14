@@ -29,10 +29,7 @@ const menuItems = [
     id: "inicio",
     label: "Inicio",
     icon: Home,
-    subItems: [
-      { id: "dashboard", label: "Dashboard" },
-      { id: "resumen", label: "Resumen" },
-    ],
+    subItems: [],
   },
   {
     id: "campanas",
@@ -54,6 +51,7 @@ const menuItems = [
       { id: "lista", label: "Lista de Analistas" },
       { id: "rendimiento", label: "Rendimiento" },
       { id: "horarios", label: "Horarios" },
+      { id: "conexiones", label: "Conexiones" },
     ],
   },
   {
@@ -126,7 +124,7 @@ export function Sidebar({ activeSection, activeSubSection, onNavigate }: Sidebar
                   {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                 </button>
 
-                {isExpanded && (
+                {isExpanded && item.subItems.length > 0 && (
                   <div className="ml-7 mt-1 space-y-1">
                     {item.subItems.map((subItem) => {
                       const isSubActive = activeSection === item.id && activeSubSection === subItem.id

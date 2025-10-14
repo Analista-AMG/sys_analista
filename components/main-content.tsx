@@ -13,13 +13,13 @@ interface MainContentProps {
   openTabs: Array<{ section: string; subSection: string; id: string }>
   onCloseTab: (tabId: string) => void
   onTabClick: (section: string, subSection: string) => void
+  onOpenCampaign?: (campaignId: string) => void
 }
 
 const getSectionLabel = (section: string, subSection: string) => {
   const labels: Record<string, Record<string, string>> = {
     inicio: {
-      dashboard: "Dashboard",
-      resumen: "Resumen",
+      main: "Inicio",
     },
     campanas: {
       activaciones: "Activaciones",
@@ -27,6 +27,11 @@ const getSectionLabel = (section: string, subSection: string) => {
       delivery: "Delivery",
       "foto-corporativo": "Foto Corporativo",
       "foto-alambrico": "Foto Alambrico",
+      nps: "NPS",
+      multiskill: "MultiSkill",
+      "programacion-seg-fija": "Programación y Seg Fija",
+      "soporte-venta-fija": "Soporte Venta Fija y Fibra",
+      validaciones: "Validaciones",
     },
     analistas: {
       lista: "Lista de Analistas",
@@ -42,7 +47,14 @@ const getSectionLabel = (section: string, subSection: string) => {
   return labels[section]?.[subSection] || subSection
 }
 
-export function MainContent({ activeSection, activeSubSection, openTabs, onCloseTab, onTabClick }: MainContentProps) {
+export function MainContent({
+  activeSection,
+  activeSubSection,
+  openTabs,
+  onCloseTab,
+  onTabClick,
+  onOpenCampaign,
+}: MainContentProps) {
   if (!activeSection || !activeSubSection) {
     return (
       <main className="flex-1 flex items-center justify-center bg-background">
@@ -93,7 +105,7 @@ export function MainContent({ activeSection, activeSubSection, openTabs, onClose
       )}
 
       <div className="flex-1 overflow-auto">
-        {activeSection === "inicio" && <InicioView subSection={activeSubSection} />}
+        {activeSection === "inicio" && <InicioView subSection={activeSubSection} onOpenCampaign={onOpenCampaign} />}
         {activeSection === "campanas" && <CampanasView subSection={activeSubSection} />}
         {activeSection === "analistas" && <AnalistasView subSection={activeSubSection} />}
         {activeSection === "configuracion" && <ConfiguracionView subSection={activeSubSection} />}
