@@ -104,7 +104,7 @@ export function MainContent({
         </div>
       )}
 
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-hidden">
         {activeSection === "inicio" && <InicioView subSection={activeSubSection} onOpenCampaign={onOpenCampaign} />}
         {activeSection === "campanas" && <CampanasView subSection={activeSubSection} />}
         {activeSection === "analistas" && <AnalistasView subSection={activeSubSection} />}

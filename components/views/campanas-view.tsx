@@ -87,6 +87,182 @@ export function CampanasView({ subSection }: CampanasViewProps) {
       asistencia_detalle: "Completo",
       observacion: "",
     },
+    {
+      fecha: "2024-01-14",
+      dni: "23456789",
+      nombre_completo: "Ana Rodríguez Silva",
+      codigo_salesys: "SLS003",
+      codigo_genesys: "GNS003",
+      nombre_laraigo: "ARODRIGUEZ",
+      nombre_360: "ARODRIGUEZ360",
+      codigo_navicat: "NAV003",
+      codigo_ipcc: "IPCC003",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista Senior",
+      campana: "Delivery",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-05-10",
+      hora_entrada: "09:00",
+      hora_salida: "17:00",
+      supervisor: "María Torres",
+      asistencia_detalle: "Completo",
+      observacion: "Excelente desempeño",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "34567890",
+      nombre_completo: "Luis Fernández Castro",
+      codigo_salesys: "SLS004",
+      codigo_genesys: "GNS004",
+      nombre_laraigo: "LFERNANDEZ",
+      nombre_360: "LFERNANDEZ360",
+      codigo_navicat: "NAV004",
+      codigo_ipcc: "IPCC004",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista",
+      campana: "NPS",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-09-01",
+      hora_entrada: "08:00",
+      hora_salida: "16:00",
+      supervisor: "Juan Pérez",
+      asistencia_detalle: "Completo",
+      observacion: "",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "45678901",
+      nombre_completo: "Patricia Morales Vega",
+      codigo_salesys: "SLS005",
+      codigo_genesys: "GNS005",
+      nombre_laraigo: "PMORALES",
+      nombre_360: "PMORALES360",
+      codigo_navicat: "NAV005",
+      codigo_ipcc: "IPCC005",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista Junior",
+      campana: "Activaciones",
+      estado: "Tardanza",
+      fecha_ingreso_campana: "2023-11-15",
+      hora_entrada: "08:30",
+      hora_salida: "16:30",
+      supervisor: "Juan Pérez",
+      asistencia_detalle: "Incompleto",
+      observacion: "Llegó 30 minutos tarde",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "56789012",
+      nombre_completo: "Roberto Sánchez Díaz",
+      codigo_salesys: "SLS006",
+      codigo_genesys: "GNS006",
+      nombre_laraigo: "RSANCHEZ",
+      nombre_360: "RSANCHEZ360",
+      codigo_navicat: "NAV006",
+      codigo_ipcc: "IPCC006",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista Senior",
+      campana: "MultiSkill",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-04-20",
+      hora_entrada: "07:00",
+      hora_salida: "15:00",
+      supervisor: "María Torres",
+      asistencia_detalle: "Completo",
+      observacion: "Turno madrugada",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "67890123",
+      nombre_completo: "Carmen Ruiz Herrera",
+      codigo_salesys: "SLS007",
+      codigo_genesys: "GNS007",
+      nombre_laraigo: "CRUIZ",
+      nombre_360: "CRUIZ360",
+      codigo_navicat: "NAV007",
+      codigo_ipcc: "IPCC007",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista",
+      campana: "Soporte Venta Fija",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-07-12",
+      hora_entrada: "10:00",
+      hora_salida: "18:00",
+      supervisor: "Carlos Mendoza",
+      asistencia_detalle: "Completo",
+      observacion: "",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "78901234",
+      nombre_completo: "Jorge Ramírez Ortiz",
+      codigo_salesys: "SLS008",
+      codigo_genesys: "GNS008",
+      nombre_laraigo: "JRAMIREZ",
+      nombre_360: "JRAMIREZ360",
+      codigo_navicat: "NAV008",
+      codigo_ipcc: "IPCC008",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista Junior",
+      campana: "Validaciones",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-10-05",
+      hora_entrada: "08:00",
+      hora_salida: "16:00",
+      supervisor: "Juan Pérez",
+      asistencia_detalle: "Completo",
+      observacion: "En capacitación",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "89012345",
+      nombre_completo: "Laura Jiménez Flores",
+      codigo_salesys: "SLS009",
+      codigo_genesys: "GNS009",
+      nombre_laraigo: "LJIMENEZ",
+      nombre_360: "LJIMENEZ360",
+      codigo_navicat: "NAV009",
+      codigo_ipcc: "IPCC009",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista Senior",
+      campana: "Foto Corporativo",
+      estado: "Permiso",
+      fecha_ingreso_campana: "2023-03-18",
+      hora_entrada: "08:00",
+      hora_salida: "16:00",
+      supervisor: "María Torres",
+      asistencia_detalle: "Parcial",
+      observacion: "Permiso médico por la tarde",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "90123456",
+      nombre_completo: "Diego Torres Mendoza",
+      codigo_salesys: "SLS010",
+      codigo_genesys: "GNS010",
+      nombre_laraigo: "DTORRES",
+      nombre_360: "DTORRES360",
+      codigo_navicat: "NAV010",
+      codigo_ipcc: "IPCC010",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista",
+      campana: "Aghaso",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-08-30",
+      hora_entrada: "09:00",
+      hora_salida: "17:00",
+      supervisor: "Carlos Mendoza",
+      asistencia_detalle: "Completo",
+      observacion: "",
+    },
   ])
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
@@ -211,7 +387,7 @@ export function CampanasView({ subSection }: CampanasViewProps) {
     }
 
     return (
-      <div className="p-6">
+      <div className="p-6 overflow-x-hidden">
         <Tabs defaultValue="dia-actual" className="w-full" onValueChange={setActiveTab}>
           <div className="flex justify-center mb-6">
             <TabsList className="w-[65%]">
@@ -306,7 +482,7 @@ export function CampanasView({ subSection }: CampanasViewProps) {
             </Card>
           </TabsContent>
 
-          <TabsContent value="nomina" className="space-y-6">
+          <TabsContent value="nomina" className="space-y-6 overflow-hidden">
             <div className="mb-6 text-center">
               <h2 className="text-2xl font-semibold text-foreground mb-4">{getTitleByTab("nomina")}</h2>
             </div>
@@ -339,148 +515,270 @@ export function CampanasView({ subSection }: CampanasViewProps) {
                 </Button>
               </div>
 
-              <div className="border rounded-lg overflow-hidden">
-                <div className="max-h-[500px] overflow-y-auto overflow-x-auto">
-                  <table className="w-full min-w-[2000px]">
-                    <thead className="sticky top-0 bg-background z-10">
-                      <tr className="border-b border-border">
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Fecha
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          DNI
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Nombre Completo
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Código SaleSys
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Código Genesys
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Nombre Laraigo
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Nombre 360
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Código Navicat
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Código IPCC
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Condición
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Cargo
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Sub Cargo
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Campaña
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Estado
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Fecha Ingreso Campaña
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Hora Entrada
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Hora Salida
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Supervisor
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Asistencia Detalle
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Observación
-                        </th>
-                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
-                          Acciones
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {nomina.map((analista, i) => (
-                        <tr key={i} className="border-b border-border hover:bg-secondary/50 transition-colors">
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.fecha}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">{analista.dni}</td>
-                          <td className="py-3 px-4 text-sm text-foreground whitespace-nowrap">
-                            {analista.nombre_completo}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.codigo_salesys}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.codigo_genesys}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.nombre_laraigo}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.nombre_360}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.codigo_navicat}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.codigo_ipcc}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.condicion}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.cargo}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.sub_cargo}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.campana}
-                          </td>
-                          <td className="py-3 px-4 whitespace-nowrap">
-                            <Badge variant={analista.estado === "Presente" ? "default" : "secondary"}>
-                              {analista.estado}
-                            </Badge>
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.fecha_ingreso_campana}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.hora_entrada}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.hora_salida}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.supervisor}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.asistencia_detalle}
-                          </td>
-                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
-                            {analista.observacion || "-"}
-                          </td>
-                          <td className="py-3 px-4 whitespace-nowrap">
-                            <Button variant="ghost" size="sm" onClick={() => openEditDialog(i)} className="h-8 w-8 p-0">
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              <div className="w-full border rounded-lg overflow-hidden">
+                {/* Header - Fixed, no horizontal scroll */}
+                <div className="w-full overflow-hidden bg-background border-b border-border">
+                  <div className="min-w-[2000px]">
+                    <div className="flex border-b border-border">
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        Fecha
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        DNI
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "180px" }}
+                      >
+                        Nombre Completo
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Código SaleSys
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Código Genesys
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Nombre Laraigo
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Nombre 360
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Código Navicat
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Código IPCC
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        Condición
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        Cargo
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Sub Cargo
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Campaña
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        Estado
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "150px" }}
+                      >
+                        Fecha Ingreso Campaña
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        Hora Entrada
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        Hora Salida
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "120px" }}
+                      >
+                        Supervisor
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "140px" }}
+                      >
+                        Asistencia Detalle
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "200px" }}
+                      >
+                        Observación
+                      </div>
+                      <div
+                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
+                        style={{ width: "100px" }}
+                      >
+                        Acciones
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Body - Scrollable horizontally */}
+                <div className="w-full max-h-[500px] overflow-x-auto overflow-y-auto">
+                  <div className="min-w-[2000px]">
+                    {nomina.map((analista, i) => (
+                      <div key={i} className="flex border-b border-border hover:bg-secondary/50 transition-colors">
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "100px" }}
+                        >
+                          {analista.fecha}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "100px" }}
+                        >
+                          {analista.dni}
+                        </div>
+                        <div className="py-3 px-4 text-sm text-foreground whitespace-nowrap" style={{ width: "180px" }}>
+                          {analista.nombre_completo}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.codigo_salesys}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.codigo_genesys}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.nombre_laraigo}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.nombre_360}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.codigo_navicat}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.codigo_ipcc}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "100px" }}
+                        >
+                          {analista.condicion}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "100px" }}
+                        >
+                          {analista.cargo}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.sub_cargo}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.campana}
+                        </div>
+                        <div className="py-3 px-4 whitespace-nowrap" style={{ width: "100px" }}>
+                          <Badge variant={analista.estado === "Presente" ? "default" : "secondary"}>
+                            {analista.estado}
+                          </Badge>
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "150px" }}
+                        >
+                          {analista.fecha_ingreso_campana}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "100px" }}
+                        >
+                          {analista.hora_entrada}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "100px" }}
+                        >
+                          {analista.hora_salida}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "120px" }}
+                        >
+                          {analista.supervisor}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "140px" }}
+                        >
+                          {analista.asistencia_detalle}
+                        </div>
+                        <div
+                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
+                          style={{ width: "200px" }}
+                        >
+                          {analista.observacion || "-"}
+                        </div>
+                        <div className="py-3 px-4 whitespace-nowrap" style={{ width: "100px" }}>
+                          <Button variant="ghost" size="sm" onClick={() => openEditDialog(i)} className="h-8 w-8 p-0">
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
