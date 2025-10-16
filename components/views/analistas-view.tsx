@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react"
+import { ScrapingPanel } from "@/components/analistas/scraping/scraping-panel"
 
 interface AnalistasViewProps {
   subSection: string
@@ -144,126 +145,7 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
   }
 
   if (subSection === "scraping") {
-    return (
-      <div className="p-6 space-y-6">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-foreground mb-1">Scraping de Datos</h2>
-          <p className="text-sm text-muted-foreground">Extracción automatizada de información</p>
-        </div>
-
-        <div className="flex justify-center">
-          <Card className="p-6 w-full max-w-4xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="space-y-2">
-                <Label htmlFor="scraping-fecha-inicio">Fecha Inicio</Label>
-                <Input
-                  id="scraping-fecha-inicio"
-                  type="date"
-                  value={fechaInicio}
-                  onChange={(e) => setFechaInicio(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="scraping-fecha-fin">Fecha Fin</Label>
-                <Input
-                  id="scraping-fecha-fin"
-                  type="date"
-                  value={fechaFin}
-                  onChange={(e) => setFechaFin(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="plataforma">Plataforma</Label>
-                <Select value={sistemaSeleccionado} onValueChange={setSistemaSeleccionado}>
-                  <SelectTrigger id="plataforma">
-                    <SelectValue placeholder="Seleccionar plataforma" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="salesys">SaleSys</SelectItem>
-                    <SelectItem value="genesys">Genesys</SelectItem>
-                    <SelectItem value="ipcc">IPCC</SelectItem>
-                    <SelectItem value="laraigo">Laraigo</SelectItem>
-                    <SelectItem value="360">360</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            {sistemaSeleccionado && (
-              <>
-                <div className="mb-6">
-                  <Label className="mb-3 block text-center">Opciones de Scraping</Label>
-                  <div className="flex flex-wrap gap-4 justify-center">
-                    <Button
-                      onClick={() =>
-                        addLog(
-                          `Iniciando scraping - Plataforma: ${sistemaSeleccionado.toUpperCase()} - Período: ${fechaInicio} al ${fechaFin}`,
-                        )
-                      }
-                      variant="default"
-                      size="lg"
-                      className="min-w-[140px]"
-                    >
-                      Iniciar Scraping
-                    </Button>
-                    <Button
-                      onClick={() => addLog(`Deteniendo scraping de ${sistemaSeleccionado.toUpperCase()}`)}
-                      variant="destructive"
-                      size="lg"
-                      className="min-w-[140px]"
-                    >
-                      Detener
-                    </Button>
-                    <Button
-                      onClick={() =>
-                        addLog(
-                          `Exportando datos de ${sistemaSeleccionado.toUpperCase()} - ${fechaInicio} al ${fechaFin}`,
-                        )
-                      }
-                      variant="outline"
-                      size="lg"
-                      className="min-w-[140px]"
-                    >
-                      Exportar Datos
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <Label>Consola de Scraping</Label>
-                    <Button onClick={clearLogs} variant="ghost" size="sm">
-                      Limpiar Consola
-                    </Button>
-                  </div>
-                  <div className="bg-black text-green-400 font-mono text-sm p-4 rounded-lg h-64 overflow-y-auto">
-                    {consoleLogs.length === 0 ? (
-                      <div className="text-gray-500">
-                        Sistema listo. Selecciona una plataforma y presiona Iniciar Scraping...
-                      </div>
-                    ) : (
-                      consoleLogs.map((log, index) => (
-                        <div key={index} className="mb-1">
-                          {log}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {!sistemaSeleccionado && (
-              <div className="text-center py-8 text-muted-foreground">
-                Selecciona una plataforma para comenzar el scraping
-              </div>
-            )}
-          </Card>
-        </div>
-      </div>
-    )
+    return <ScrapingPanel />
   }
 
   return null
