@@ -29,6 +29,10 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
     setConsoleLogs((prev) => [...prev, `[${timestamp}] ${message}`])
   }
 
+  const clearLogs = () => {
+    setConsoleLogs([])
+  }
+
   const getSystemButtons = () => {
     switch (sistemaSeleccionado) {
       case "salesys":
@@ -42,15 +46,15 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
     }
   }
 
-  if (subSection === "conexiones") {
-    return (
-      <div className="p-6 space-y-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-foreground mb-1">Conexiones</h2>
-          <p className="text-sm text-muted-foreground">Consulta de conexiones por rango de fechas</p>
-        </div>
+  const ConexionesInterface = ({ title, description }: { title: string; description: string }) => (
+    <div className="p-6 space-y-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-semibold text-foreground mb-1">{title}</h2>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
 
-        <Card className="p-6">
+      <div className="flex justify-center">
+        <Card className="p-6 w-full max-w-4xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="space-y-2">
               <Label htmlFor="fecha-inicio">Fecha Inicio</Label>
@@ -84,8 +88,8 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
 
           {sistemaSeleccionado && (
             <div className="mb-6">
-              <Label className="mb-3 block">Opciones de Reporte</Label>
-              <div className="flex flex-wrap gap-3">
+              <Label className="mb-3 block text-center">Opciones de Reporte</Label>
+              <div className="flex flex-wrap gap-4 justify-center">
                 {getSystemButtons().map((buttonName) => (
                   <Button
                     key={buttonName}
@@ -95,6 +99,8 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
                       )
                     }
                     variant="outline"
+                    size="lg"
+                    className="min-w-[140px]"
                   >
                     {buttonName}
                   </Button>
@@ -105,7 +111,12 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
 
           {sistemaSeleccionado && (
             <div className="mt-6">
-              <Label className="mb-2 block">Consola de Eventos</Label>
+              <div className="flex items-center justify-between mb-2">
+                <Label>Consola de Eventos</Label>
+                <Button onClick={clearLogs} variant="ghost" size="sm">
+                  Limpiar Consola
+                </Button>
+              </div>
               <div className="bg-black text-green-400 font-mono text-sm p-4 rounded-lg h-64 overflow-y-auto">
                 {consoleLogs.length === 0 ? (
                   <div className="text-gray-500">Esperando eventos...</div>
@@ -121,40 +132,15 @@ export function AnalistasView({ subSection }: AnalistasViewProps) {
           )}
         </Card>
       </div>
-    )
+    </div>
+  )
+
+  if (subSection === "conexiones") {
+    return <ConexionesInterface title="Conexiones" description="Consulta de conexiones por rango de fechas" />
   }
 
   if (subSection === "campanas") {
-    return (
-      <div className="p-6 space-y-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-foreground mb-1">Campañas de Analistas</h2>
-          <p className="text-sm text-muted-foreground">Gestión de campañas asignadas a analistas</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["Activaciones", "Aghaso", "Delivery", "Foto Corporativo", "Foto Alambrico", "NPS"].map((campana, i) => (
-            <Card key={i} className="p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-2">{campana}</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Analistas asignados:</span>
-                  <span className="font-semibold text-foreground">{5 + i}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Gestiones hoy:</span>
-                  <span className="font-semibold text-foreground">{120 + i * 20}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Efectividad:</span>
-                  <span className="font-semibold text-foreground">{75 + i}%</span>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    )
+    return <ConexionesInterface title="Campañas de Analistas" description="Consulta de campañas por rango de fechas" />
   }
 
   if (subSection === "scraping") {

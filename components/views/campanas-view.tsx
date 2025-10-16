@@ -4,47 +4,254 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useState } from "react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { useState, useEffect } from "react"
+import { Calendar, Plus, Pencil, RefreshCw } from "lucide-react"
 
 interface CampanasViewProps {
   subSection: string
 }
 
-export function CampanasView({ subSection }: CampanasViewProps) {
-  const [selectedDashboard, setSelectedDashboard] = useState("activaciones")
+interface Analista {
+  fecha: string
+  dni: string
+  nombre_completo: string
+  codigo_salesys: string
+  codigo_genesys: string
+  nombre_laraigo: string
+  nombre_360: string
+  codigo_navicat: string
+  codigo_ipcc: string
+  condicion: string
+  cargo: string
+  sub_cargo: string
+  campana: string
+  estado: string
+  fecha_ingreso_campana: string
+  hora_entrada: string
+  hora_salida: string
+  supervisor: string
+  asistencia_detalle: string
+  observacion: string
+}
 
-  const renderActivacionesContent = () => {
+export function CampanasView({ subSection }: CampanasViewProps) {
+  const [activeTab, setActiveTab] = useState("dia-actual")
+  const [selectedDashboard, setSelectedDashboard] = useState("activaciones")
+  const [nominaDate, setNominaDate] = useState("")
+
+  const [nomina, setNomina] = useState<Analista[]>([
+    {
+      fecha: "2024-01-14",
+      dni: "12345678",
+      nombre_completo: "María García López",
+      codigo_salesys: "SLS001",
+      codigo_genesys: "GNS001",
+      nombre_laraigo: "MGARCIA",
+      nombre_360: "MGARCIA360",
+      codigo_navicat: "NAV001",
+      codigo_ipcc: "IPCC001",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista Senior",
+      campana: "Activaciones",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-06-15",
+      hora_entrada: "08:00",
+      hora_salida: "16:00",
+      supervisor: "Juan Pérez",
+      asistencia_detalle: "Completo",
+      observacion: "Sin observaciones",
+    },
+    {
+      fecha: "2024-01-14",
+      dni: "87654321",
+      nombre_completo: "Carlos López Martínez",
+      codigo_salesys: "SLS002",
+      codigo_genesys: "GNS002",
+      nombre_laraigo: "CLOPEZ",
+      nombre_360: "CLOPEZ360",
+      codigo_navicat: "NAV002",
+      codigo_ipcc: "IPCC002",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "Analista Junior",
+      campana: "Activaciones",
+      estado: "Presente",
+      fecha_ingreso_campana: "2023-08-20",
+      hora_entrada: "08:00",
+      hora_salida: "16:00",
+      supervisor: "Juan Pérez",
+      asistencia_detalle: "Completo",
+      observacion: "",
+    },
+  ])
+
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
+
+  const [formData, setFormData] = useState<Analista>({
+    fecha: "",
+    dni: "",
+    nombre_completo: "",
+    codigo_salesys: "",
+    codigo_genesys: "",
+    nombre_laraigo: "",
+    nombre_360: "",
+    codigo_navicat: "",
+    codigo_ipcc: "",
+    condicion: "Activo",
+    cargo: "Analista",
+    sub_cargo: "",
+    campana: "",
+    estado: "Presente",
+    fecha_ingreso_campana: "",
+    hora_entrada: "",
+    hora_salida: "",
+    supervisor: "",
+    asistencia_detalle: "Completo",
+    observacion: "",
+  })
+
+  useEffect(() => {
+    // Set default date to yesterday
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+    const formattedDate = yesterday.toISOString().split("T")[0]
+    setNominaDate(formattedDate)
+  }, [])
+
+  const handleActualizar = () => {
+    console.log("[v0] Actualizando nómina para la fecha:", nominaDate)
+    // Here you would typically fetch new data from the backend
+  }
+
+  const handleAddAnalista = () => {
+    setNomina([...nomina, formData])
+    setIsAddDialogOpen(false)
+    setFormData({
+      fecha: "",
+      dni: "",
+      nombre_completo: "",
+      codigo_salesys: "",
+      codigo_genesys: "",
+      nombre_laraigo: "",
+      nombre_360: "",
+      codigo_navicat: "",
+      codigo_ipcc: "",
+      condicion: "Activo",
+      cargo: "Analista",
+      sub_cargo: "",
+      campana: "",
+      estado: "Presente",
+      fecha_ingreso_campana: "",
+      hora_entrada: "",
+      hora_salida: "",
+      supervisor: "",
+      asistencia_detalle: "Completo",
+      observacion: "",
+    })
+  }
+
+  const handleEditAnalista = () => {
+    if (editingIndex !== null) {
+      const updatedNomina = [...nomina]
+      updatedNomina[editingIndex] = formData
+      setNomina(updatedNomina)
+      setIsEditDialogOpen(false)
+      setEditingIndex(null)
+      setFormData({
+        fecha: "",
+        dni: "",
+        nombre_completo: "",
+        codigo_salesys: "",
+        codigo_genesys: "",
+        nombre_laraigo: "",
+        nombre_360: "",
+        codigo_navicat: "",
+        codigo_ipcc: "",
+        condicion: "Activo",
+        cargo: "Analista",
+        sub_cargo: "",
+        campana: "",
+        estado: "Presente",
+        fecha_ingreso_campana: "",
+        hora_entrada: "",
+        hora_salida: "",
+        supervisor: "",
+        asistencia_detalle: "Completo",
+        observacion: "",
+      })
+    }
+  }
+
+  const openEditDialog = (index: number) => {
+    setEditingIndex(index)
+    setFormData(nomina[index])
+    setIsEditDialogOpen(true)
+  }
+
+  const renderCampanaContent = (campanaName: string) => {
+    const getTitleByTab = (tab: string) => {
+      switch (tab) {
+        case "dia-actual":
+          return `Día Actual de ${campanaName}`
+        case "dashboard":
+          return `Dashboard de ${campanaName}`
+        case "nomina":
+          return `Nómina de ${campanaName}`
+        case "descargas":
+          return `Descargas de ${campanaName}`
+        default:
+          return campanaName
+      }
+    }
+
     return (
       <div className="p-6">
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold text-foreground mb-1">Activaciones</h2>
-          <p className="text-sm text-muted-foreground">Gestión de campaña Activaciones</p>
-        </div>
-
-        <Tabs defaultValue="dia-actual" className="w-full">
-          <TabsList className="mb-6">
-            <TabsTrigger value="dia-actual">Día Actual</TabsTrigger>
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="descargas">Descargas</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="dia-actual" className="w-full" onValueChange={setActiveTab}>
+          <div className="flex justify-center mb-6">
+            <TabsList className="w-[65%]">
+              <TabsTrigger value="dia-actual" className="flex-1">
+                Día Actual
+              </TabsTrigger>
+              <TabsTrigger value="dashboard" className="flex-1">
+                Dashboard
+              </TabsTrigger>
+              <TabsTrigger value="nomina" className="flex-1">
+                Nómina
+              </TabsTrigger>
+              <TabsTrigger value="descargas" className="flex-1">
+                Descargas
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="dia-actual" className="space-y-6">
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-semibold text-foreground mb-1">{getTitleByTab("dia-actual")}</h2>
+              <p className="text-sm text-muted-foreground">Gestiones del día en curso</p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card className="p-4">
                 <p className="text-sm text-muted-foreground">Gestiones Hoy</p>
-                <p className="text-2xl font-bold text-foreground mt-2">156</p>
+                <p className="text-2xl font-bold text-foreground mt-2">{Math.floor(Math.random() * 200) + 100}</p>
               </Card>
               <Card className="p-4">
                 <p className="text-sm text-muted-foreground">Efectividad</p>
-                <p className="text-2xl font-bold text-foreground mt-2">92%</p>
+                <p className="text-2xl font-bold text-foreground mt-2">{Math.floor(Math.random() * 20) + 80}%</p>
               </Card>
               <Card className="p-4">
                 <p className="text-sm text-muted-foreground">En Proceso</p>
-                <p className="text-2xl font-bold text-foreground mt-2">23</p>
+                <p className="text-2xl font-bold text-foreground mt-2">{Math.floor(Math.random() * 30) + 10}</p>
               </Card>
               <Card className="p-4">
                 <p className="text-sm text-muted-foreground">Completadas</p>
-                <p className="text-2xl font-bold text-foreground mt-2">133</p>
+                <p className="text-2xl font-bold text-foreground mt-2">{Math.floor(Math.random() * 150) + 80}</p>
               </Card>
             </div>
 
@@ -69,22 +276,24 @@ export function CampanasView({ subSection }: CampanasViewProps) {
           </TabsContent>
 
           <TabsContent value="dashboard" className="space-y-6">
-            <div className="mb-6">
-              <h3 className="text-2xl font-semibold text-foreground mb-4">Dashboard de Activaciones</h3>
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">{getTitleByTab("dashboard")}</h2>
 
-              <div className="mb-4">
-                <label className="text-sm text-muted-foreground mb-2 block">Seleccionar Dashboard</label>
-                <Select value={selectedDashboard} onValueChange={setSelectedDashboard}>
-                  <SelectTrigger className="w-full md:w-[300px]">
-                    <SelectValue placeholder="Selecciona un dashboard" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="activaciones">Dashboard Activaciones</SelectItem>
-                    <SelectItem value="general">Dashboard General</SelectItem>
-                    <SelectItem value="analistas">Dashboard Analistas</SelectItem>
-                    <SelectItem value="historico">Dashboard Histórico</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="mb-4 flex justify-center">
+                <div className="w-full max-w-[300px]">
+                  <label className="text-sm text-muted-foreground mb-2 block">Seleccionar Dashboard</label>
+                  <Select value={selectedDashboard} onValueChange={setSelectedDashboard}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona un dashboard" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="general">Dashboard General</SelectItem>
+                      <SelectItem value="analistas">Dashboard Analistas</SelectItem>
+                      <SelectItem value="historico">Dashboard Histórico</SelectItem>
+                      <SelectItem value="comparativo">Dashboard Comparativo</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
@@ -97,8 +306,345 @@ export function CampanasView({ subSection }: CampanasViewProps) {
             </Card>
           </TabsContent>
 
-          <TabsContent value="descargas" className="space-y-6">
+          <TabsContent value="nomina" className="space-y-6">
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">{getTitleByTab("nomina")}</h2>
+            </div>
+
             <Card className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-foreground">Nómina de Analistas</h3>
+                <Button onClick={() => setIsAddDialogOpen(true)} size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Agregar
+                </Button>
+              </div>
+
+              <div className="mb-6 flex items-end gap-3">
+                <div className="flex-1 max-w-[300px]">
+                  <label className="text-sm text-muted-foreground mb-2 block">Seleccionar Fecha</label>
+                  <div className="relative">
+                    <Input
+                      type="date"
+                      value={nominaDate}
+                      onChange={(e) => setNominaDate(e.target.value)}
+                      className="pr-10"
+                    />
+                    <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  </div>
+                </div>
+                <Button onClick={handleActualizar} size="default">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Actualizar
+                </Button>
+              </div>
+
+<<<<<<< HEAD
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[2000px]">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Fecha
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        DNI
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Nombre Completo
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Código SaleSys
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Código Genesys
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Nombre Laraigo
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Nombre 360
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Código Navicat
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Código IPCC
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Condición
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Cargo
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Sub Cargo
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Campaña
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Estado
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Fecha Ingreso Campaña
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Hora Entrada
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Hora Salida
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Supervisor
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Asistencia Detalle
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Observación
+                      </th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                        Acciones
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {nomina.map((analista, i) => (
+                      <tr key={i} className="border-b border-border hover:bg-secondary/50 transition-colors">
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">{analista.fecha}</td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">{analista.dni}</td>
+                        <td className="py-3 px-4 text-sm text-foreground whitespace-nowrap">
+                          {analista.nombre_completo}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.codigo_salesys}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.codigo_genesys}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.nombre_laraigo}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.nombre_360}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.codigo_navicat}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.codigo_ipcc}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.condicion}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">{analista.cargo}</td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.sub_cargo}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.campana}
+                        </td>
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <Badge variant={analista.estado === "Presente" ? "default" : "secondary"}>
+                            {analista.estado}
+                          </Badge>
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.fecha_ingreso_campana}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.hora_entrada}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.hora_salida}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.supervisor}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.asistencia_detalle}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                          {analista.observacion || "-"}
+                        </td>
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <Button variant="ghost" size="sm" onClick={() => openEditDialog(i)} className="h-8 w-8 p-0">
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+=======
+              <div className="border rounded-lg overflow-hidden">
+                <div className="max-h-[500px] overflow-y-auto overflow-x-auto">
+                  <table className="w-full min-w-[2000px]">
+                    <thead className="sticky top-0 bg-background z-10">
+                      <tr className="border-b border-border">
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Fecha
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          DNI
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Nombre Completo
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Código SaleSys
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Código Genesys
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Nombre Laraigo
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Nombre 360
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Código Navicat
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Código IPCC
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Condición
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Cargo
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Sub Cargo
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Campaña
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Estado
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Fecha Ingreso Campaña
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Hora Entrada
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Hora Salida
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Supervisor
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Asistencia Detalle
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Observación
+                        </th>
+                        <th className="text-left py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap">
+                          Acciones
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {nomina.map((analista, i) => (
+                        <tr key={i} className="border-b border-border hover:bg-secondary/50 transition-colors">
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.fecha}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">{analista.dni}</td>
+                          <td className="py-3 px-4 text-sm text-foreground whitespace-nowrap">
+                            {analista.nombre_completo}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.codigo_salesys}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.codigo_genesys}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.nombre_laraigo}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.nombre_360}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.codigo_navicat}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.codigo_ipcc}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.condicion}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.cargo}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.sub_cargo}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.campana}
+                          </td>
+                          <td className="py-3 px-4 whitespace-nowrap">
+                            <Badge variant={analista.estado === "Presente" ? "default" : "secondary"}>
+                              {analista.estado}
+                            </Badge>
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.fecha_ingreso_campana}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.hora_entrada}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.hora_salida}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.supervisor}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.asistencia_detalle}
+                          </td>
+                          <td className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap">
+                            {analista.observacion || "-"}
+                          </td>
+                          <td className="py-3 px-4 whitespace-nowrap">
+                            <Button variant="ghost" size="sm" onClick={() => openEditDialog(i)} className="h-8 w-8 p-0">
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+>>>>>>> aefd13c (v0 16)
+              </div>
+
+              <div className="mt-6 flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  Mostrando nómina del{" "}
+                  {new Date(nominaDate).toLocaleDateString("es-ES", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+                <Button size="sm">Descargar Nómina</Button>
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="descargas" className="space-y-6">
+            <div className="mb-6 text-center">
+              <h2 className="text-2xl font-semibold text-foreground mb-4">{getTitleByTab("descargas")}</h2>
+            </div>
+
+            <div className="p-6">
               <h3 className="text-lg font-semibold text-foreground mb-4">Reportes Disponibles</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
@@ -137,64 +683,515 @@ export function CampanasView({ subSection }: CampanasViewProps) {
                   <Button size="sm">Descargar Excel</Button>
                 </div>
               </div>
-            </Card>
+            </div>
           </TabsContent>
         </Tabs>
-      </div>
-    )
-  }
 
-  const renderCampanaContent = (campana: string) => {
-    return (
-      <div className="p-6 space-y-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-foreground mb-1">{campana}</h2>
-          <p className="text-sm text-muted-foreground">Gestión de campaña {campana}</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="p-4">
-            <p className="text-sm text-muted-foreground">Gestiones Totales</p>
-            <p className="text-2xl font-bold text-foreground mt-2">1,234</p>
-          </Card>
-          <Card className="p-4">
-            <p className="text-sm text-muted-foreground">Efectividad</p>
-            <p className="text-2xl font-bold text-foreground mt-2">85%</p>
-          </Card>
-          <Card className="p-4">
-            <p className="text-sm text-muted-foreground">Analistas Asignados</p>
-            <p className="text-2xl font-bold text-foreground mt-2">8</p>
-          </Card>
-        </div>
-
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">Gestiones Recientes</h3>
-            <Button size="sm">Ver Todas</Button>
-          </div>
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-foreground">Cliente #{1000 + i}</p>
-                  <p className="text-xs text-muted-foreground">Analista: Juan Pérez</p>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Agregar Analista</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="fecha">Fecha</Label>
+                  <Input
+                    id="fecha"
+                    type="date"
+                    value={formData.fecha}
+                    onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
+                  />
                 </div>
-                <Badge variant={i % 2 === 0 ? "default" : "secondary"}>
-                  {i % 2 === 0 ? "Completado" : "En Proceso"}
-                </Badge>
+                <div className="space-y-2">
+                  <Label htmlFor="dni">DNI</Label>
+                  <Input
+                    id="dni"
+                    value={formData.dni}
+                    onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
+                    placeholder="12345678"
+                  />
+                </div>
               </div>
-            ))}
-          </div>
-        </Card>
+
+              <div className="space-y-2">
+                <Label htmlFor="nombre_completo">Nombre Completo</Label>
+                <Input
+                  id="nombre_completo"
+                  value={formData.nombre_completo}
+                  onChange={(e) => setFormData({ ...formData, nombre_completo: e.target.value })}
+                  placeholder="Nombre completo"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="codigo_salesys">Código SaleSys</Label>
+                  <Input
+                    id="codigo_salesys"
+                    value={formData.codigo_salesys}
+                    onChange={(e) => setFormData({ ...formData, codigo_salesys: e.target.value })}
+                    placeholder="SLS001"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="codigo_genesys">Código Genesys</Label>
+                  <Input
+                    id="codigo_genesys"
+                    value={formData.codigo_genesys}
+                    onChange={(e) => setFormData({ ...formData, codigo_genesys: e.target.value })}
+                    placeholder="GNS001"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nombre_laraigo">Nombre Laraigo</Label>
+                  <Input
+                    id="nombre_laraigo"
+                    value={formData.nombre_laraigo}
+                    onChange={(e) => setFormData({ ...formData, nombre_laraigo: e.target.value })}
+                    placeholder="USUARIO"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="nombre_360">Nombre 360</Label>
+                  <Input
+                    id="nombre_360"
+                    value={formData.nombre_360}
+                    onChange={(e) => setFormData({ ...formData, nombre_360: e.target.value })}
+                    placeholder="USUARIO360"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="codigo_navicat">Código Navicat</Label>
+                  <Input
+                    id="codigo_navicat"
+                    value={formData.codigo_navicat}
+                    onChange={(e) => setFormData({ ...formData, codigo_navicat: e.target.value })}
+                    placeholder="NAV001"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="codigo_ipcc">Código IPCC</Label>
+                  <Input
+                    id="codigo_ipcc"
+                    value={formData.codigo_ipcc}
+                    onChange={(e) => setFormData({ ...formData, codigo_ipcc: e.target.value })}
+                    placeholder="IPCC001"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="condicion">Condición</Label>
+                  <Select
+                    value={formData.condicion}
+                    onValueChange={(value) => setFormData({ ...formData, condicion: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Activo">Activo</SelectItem>
+                      <SelectItem value="Inactivo">Inactivo</SelectItem>
+                      <SelectItem value="Suspendido">Suspendido</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="cargo">Cargo</Label>
+                  <Input
+                    id="cargo"
+                    value={formData.cargo}
+                    onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
+                    placeholder="Analista"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="sub_cargo">Sub Cargo</Label>
+                  <Input
+                    id="sub_cargo"
+                    value={formData.sub_cargo}
+                    onChange={(e) => setFormData({ ...formData, sub_cargo: e.target.value })}
+                    placeholder="Analista Senior"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="campana">Campaña</Label>
+                  <Input
+                    id="campana"
+                    value={formData.campana}
+                    onChange={(e) => setFormData({ ...formData, campana: e.target.value })}
+                    placeholder="Activaciones"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="estado">Estado</Label>
+                  <Select
+                    value={formData.estado}
+                    onValueChange={(value) => setFormData({ ...formData, estado: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Presente">Presente</SelectItem>
+                      <SelectItem value="Ausente">Ausente</SelectItem>
+                      <SelectItem value="Tardanza">Tardanza</SelectItem>
+                      <SelectItem value="Permiso">Permiso</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="fecha_ingreso_campana">Fecha Ingreso Campaña</Label>
+                  <Input
+                    id="fecha_ingreso_campana"
+                    type="date"
+                    value={formData.fecha_ingreso_campana}
+                    onChange={(e) => setFormData({ ...formData, fecha_ingreso_campana: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="hora_entrada">Hora Entrada</Label>
+                  <Input
+                    id="hora_entrada"
+                    type="time"
+                    value={formData.hora_entrada}
+                    onChange={(e) => setFormData({ ...formData, hora_entrada: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="hora_salida">Hora Salida</Label>
+                  <Input
+                    id="hora_salida"
+                    type="time"
+                    value={formData.hora_salida}
+                    onChange={(e) => setFormData({ ...formData, hora_salida: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="supervisor">Supervisor</Label>
+                  <Input
+                    id="supervisor"
+                    value={formData.supervisor}
+                    onChange={(e) => setFormData({ ...formData, supervisor: e.target.value })}
+                    placeholder="Nombre del supervisor"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="asistencia_detalle">Asistencia Detalle</Label>
+                  <Select
+                    value={formData.asistencia_detalle}
+                    onValueChange={(value) => setFormData({ ...formData, asistencia_detalle: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Completo">Completo</SelectItem>
+                      <SelectItem value="Incompleto">Incompleto</SelectItem>
+                      <SelectItem value="Parcial">Parcial</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="observacion">Observación</Label>
+                <Input
+                  id="observacion"
+                  value={formData.observacion}
+                  onChange={(e) => setFormData({ ...formData, observacion: e.target.value })}
+                  placeholder="Observaciones adicionales"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleAddAnalista}>Agregar</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Editar Analista</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-fecha">Fecha</Label>
+                  <Input
+                    id="edit-fecha"
+                    type="date"
+                    value={formData.fecha}
+                    onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-dni">DNI</Label>
+                  <Input
+                    id="edit-dni"
+                    value={formData.dni}
+                    onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
+                    placeholder="12345678"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-nombre_completo">Nombre Completo</Label>
+                <Input
+                  id="edit-nombre_completo"
+                  value={formData.nombre_completo}
+                  onChange={(e) => setFormData({ ...formData, nombre_completo: e.target.value })}
+                  placeholder="Nombre completo"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-codigo_salesys">Código SaleSys</Label>
+                  <Input
+                    id="edit-codigo_salesys"
+                    value={formData.codigo_salesys}
+                    onChange={(e) => setFormData({ ...formData, codigo_salesys: e.target.value })}
+                    placeholder="SLS001"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-codigo_genesys">Código Genesys</Label>
+                  <Input
+                    id="edit-codigo_genesys"
+                    value={formData.codigo_genesys}
+                    onChange={(e) => setFormData({ ...formData, codigo_genesys: e.target.value })}
+                    placeholder="GNS001"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-nombre_laraigo">Nombre Laraigo</Label>
+                  <Input
+                    id="edit-nombre_laraigo"
+                    value={formData.nombre_laraigo}
+                    onChange={(e) => setFormData({ ...formData, nombre_laraigo: e.target.value })}
+                    placeholder="USUARIO"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-nombre_360">Nombre 360</Label>
+                  <Input
+                    id="edit-nombre_360"
+                    value={formData.nombre_360}
+                    onChange={(e) => setFormData({ ...formData, nombre_360: e.target.value })}
+                    placeholder="USUARIO360"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-codigo_navicat">Código Navicat</Label>
+                  <Input
+                    id="edit-codigo_navicat"
+                    value={formData.codigo_navicat}
+                    onChange={(e) => setFormData({ ...formData, codigo_navicat: e.target.value })}
+                    placeholder="NAV001"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-codigo_ipcc">Código IPCC</Label>
+                  <Input
+                    id="edit-codigo_ipcc"
+                    value={formData.codigo_ipcc}
+                    onChange={(e) => setFormData({ ...formData, codigo_ipcc: e.target.value })}
+                    placeholder="IPCC001"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-condicion">Condición</Label>
+                  <Select
+                    value={formData.condicion}
+                    onValueChange={(value) => setFormData({ ...formData, condicion: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Activo">Activo</SelectItem>
+                      <SelectItem value="Inactivo">Inactivo</SelectItem>
+                      <SelectItem value="Suspendido">Suspendido</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-cargo">Cargo</Label>
+                  <Input
+                    id="edit-cargo"
+                    value={formData.cargo}
+                    onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
+                    placeholder="Analista"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-sub_cargo">Sub Cargo</Label>
+                  <Input
+                    id="edit-sub_cargo"
+                    value={formData.sub_cargo}
+                    onChange={(e) => setFormData({ ...formData, sub_cargo: e.target.value })}
+                    placeholder="Analista Senior"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-campana">Campaña</Label>
+                  <Input
+                    id="edit-campana"
+                    value={formData.campana}
+                    onChange={(e) => setFormData({ ...formData, campana: e.target.value })}
+                    placeholder="Activaciones"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-estado">Estado</Label>
+                  <Select
+                    value={formData.estado}
+                    onValueChange={(value) => setFormData({ ...formData, estado: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Presente">Presente</SelectItem>
+                      <SelectItem value="Ausente">Ausente</SelectItem>
+                      <SelectItem value="Tardanza">Tardanza</SelectItem>
+                      <SelectItem value="Permiso">Permiso</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-fecha_ingreso_campana">Fecha Ingreso Campaña</Label>
+                  <Input
+                    id="edit-fecha_ingreso_campana"
+                    type="date"
+                    value={formData.fecha_ingreso_campana}
+                    onChange={(e) => setFormData({ ...formData, fecha_ingreso_campana: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-hora_entrada">Hora Entrada</Label>
+                  <Input
+                    id="edit-hora_entrada"
+                    type="time"
+                    value={formData.hora_entrada}
+                    onChange={(e) => setFormData({ ...formData, hora_entrada: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-hora_salida">Hora Salida</Label>
+                  <Input
+                    id="edit-hora_salida"
+                    type="time"
+                    value={formData.hora_salida}
+                    onChange={(e) => setFormData({ ...formData, hora_salida: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-supervisor">Supervisor</Label>
+                  <Input
+                    id="edit-supervisor"
+                    value={formData.supervisor}
+                    onChange={(e) => setFormData({ ...formData, supervisor: e.target.value })}
+                    placeholder="Nombre del supervisor"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-asistencia_detalle">Asistencia Detalle</Label>
+                  <Select
+                    value={formData.asistencia_detalle}
+                    onValueChange={(value) => setFormData({ ...formData, asistencia_detalle: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Completo">Completo</SelectItem>
+                      <SelectItem value="Incompleto">Incompleto</SelectItem>
+                      <SelectItem value="Parcial">Parcial</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-observacion">Observación</Label>
+                <Input
+                  id="edit-observacion"
+                  value={formData.observacion}
+                  onChange={(e) => setFormData({ ...formData, observacion: e.target.value })}
+                  placeholder="Observaciones adicionales"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleEditAnalista}>Guardar Cambios</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     )
   }
 
-  if (subSection === "activaciones") return renderActivacionesContent()
+  if (subSection === "activaciones") return renderCampanaContent("Activaciones")
   if (subSection === "aghaso") return renderCampanaContent("Aghaso")
   if (subSection === "delivery") return renderCampanaContent("Delivery")
   if (subSection === "foto-corporativo") return renderCampanaContent("Foto Corporativo")
   if (subSection === "foto-alambrico") return renderCampanaContent("Foto Alambrico")
+  if (subSection === "nps") return renderCampanaContent("NPS")
+  if (subSection === "multiskill") return renderCampanaContent("MultiSkill")
+  if (subSection === "programacion-seg-fija") return renderCampanaContent("Programación y Seg Fija")
+  if (subSection === "soporte-venta-fija") return renderCampanaContent("Soporte Venta Fija")
+  if (subSection === "validaciones") return renderCampanaContent("Validaciones")
 
   return null
 }
