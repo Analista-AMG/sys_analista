@@ -62,7 +62,7 @@ export function CallCenterLayout() {
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       <Sidebar activeSection={activeSection} activeSubSection={activeSubSection} onNavigate={handleNavigate} />
       <MainContent
         activeSection={activeSection}
@@ -70,7 +70,7 @@ export function CallCenterLayout() {
         openTabs={openTabs}
         onCloseTab={handleCloseTab}
         onTabClick={handleTabClick}
-        onOpenCampaign={handleOpenCampaign} // Ensure this prop is used in MainContent if needed
+        onOpenCampaign={handleOpenCampaign}
       />
     </div>
   )
