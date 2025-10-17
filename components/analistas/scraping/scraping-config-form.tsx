@@ -52,6 +52,24 @@ const PLATFORMS: Platform[] = [
       { id: "360_agentes", label: "Dashboard Agentes", value: "agentes" },
     ],
   },
+  {
+    id: "ipcc",
+    name: "IPCC",
+    options: [
+      { id: "ipcc_reporte1", label: "Reporte 1", value: "reporte1" },
+      { id: "ipcc_reporte2", label: "Reporte 2", value: "reporte2" },
+      { id: "ipcc_soporte", label: "Soporte", value: "soporte" },
+    ],
+  },
+  {
+    id: "portal_sbs",
+    name: "Portal SBS",
+    options: [
+      { id: "portal_sbs_consultas", label: "Consultas", value: "consultas" },
+      { id: "portal_sbs_reportes", label: "Reportes", value: "reportes" },
+      { id: "portal_sbs_estadisticas", label: "Estadísticas", value: "estadisticas" },
+    ],
+  },
 ]
 
 const SCHEDULE_OPTIONS: { value: ScheduleInterval; label: string }[] = [

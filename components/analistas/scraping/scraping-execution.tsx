@@ -20,6 +20,8 @@ export function ScrapingExecution({ job, onCancel }: ScrapingExecutionProps) {
         laraigo: "Laraigo",
         navicat: "Navicat",
         "360": "360",
+        ipcc: "IPCC",
+        portal_sbs: "Portal SBS",
       }
       return platformLabels[p.platformId] || p.platformId
     })

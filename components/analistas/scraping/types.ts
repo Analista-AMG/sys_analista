@@ -4,7 +4,7 @@ export type ScrapingStatus = "completed" | "in_progress" | "pending" | "error"
 
 export type ScheduleInterval = "now" | "5min" | "10min" | "15min" | "30min" | "60min"
 
-export type PlatformType = "salesys" | "laraigo" | "navicat" | "360"
+export type PlatformType = "salesys" | "laraigo" | "navicat" | "360" | "ipcc" | "portal_sbs"
 
 export interface PlatformOption {
   id: string

@@ -144,17 +144,19 @@ export function ScrapingPanel() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-semibold text-foreground mb-1">Scraping de Datos</h2>
-        <p className="text-sm text-muted-foreground">Extraccion automatizada de informacion</p>
+    <div className="h-full flex flex-col">
+      <div className="text-center p-6 pb-4">
+        <h2 className="text-2xl font-semibold text-foreground mb-1">SCRAPING DE DATOS</h2>
+        <p className="text-sm text-muted-foreground">Extracción automatizada de información</p>
       </div>
 
-      <ScrapingConfigForm onExecute={handleExecute} isExecuting={currentJob !== null} />
+      <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-6">
+        <ScrapingConfigForm onExecute={handleExecute} isExecuting={currentJob !== null} />
 
-      {currentJob && <ScrapingExecution job={currentJob} onCancel={handleCancel} />}
+        {currentJob && <ScrapingExecution job={currentJob} onCancel={handleCancel} />}
 
-      <ScrapingHistoryTable jobs={historyJobs} onReExecute={handleReExecute} onViewDetails={handleViewDetails} />
+        <ScrapingHistoryTable jobs={historyJobs} onReExecute={handleReExecute} onViewDetails={handleViewDetails} />
+      </div>
     </div>
   )
 }

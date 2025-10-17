@@ -80,6 +80,8 @@ export function ScrapingHistoryTable({ jobs, onReExecute, onViewDetails }: Scrap
                   laraigo: "Laraigo",
                   navicat: "Navicat",
                   "360": "360",
+                  ipcc: "IPCC",
+                  portal_sbs: "Portal SBS",
                 }
 
                 const platformsText = job.config.platforms
