@@ -518,7 +518,7 @@ export function CampanasView({ subSection }: CampanasViewProps) {
               <div className="w-full border rounded-lg overflow-hidden">
                 {/* Header - Fixed, no horizontal scroll */}
                 <div className="w-full overflow-hidden bg-background border-b border-border">
-                  <div className="min-w-[2000px]">
+                  <div className="w-full">
                     <div className="flex border-b border-border">
                       <div
                         className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
@@ -640,9 +640,10 @@ export function CampanasView({ subSection }: CampanasViewProps) {
                       >
                         Observación
                       </div>
+                      {/* Updated Actions column width */}
                       <div
                         className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
+                        style={{ width: "60px" }}
                       >
                         Acciones
                       </div>
@@ -650,9 +651,9 @@ export function CampanasView({ subSection }: CampanasViewProps) {
                   </div>
                 </div>
 
-                {/* Body - Scrollable horizontally */}
-                <div className="w-full max-h-[500px] overflow-x-auto overflow-y-auto">
-                  <div className="min-w-[2000px]">
+                {/* Body - Scrollable both horizontally and vertically */}
+                <div className="w-full max-h-[500px] overflow-auto border-t border-border">
+                  <div className="w-full inline-block">
                     {nomina.map((analista, i) => (
                       <div key={i} className="flex border-b border-border hover:bg-secondary/50 transition-colors">
                         <div
@@ -771,7 +772,7 @@ export function CampanasView({ subSection }: CampanasViewProps) {
                         >
                           {analista.observacion || "-"}
                         </div>
-                        <div className="py-3 px-4 whitespace-nowrap" style={{ width: "100px" }}>
+                        <div className="py-3 px-4 whitespace-nowrap" style={{ width: "60px" }}>
                           <Button variant="ghost" size="sm" onClick={() => openEditDialog(i)} className="h-8 w-8 p-0">
                             <Pencil className="h-4 w-4" />
                           </Button>
