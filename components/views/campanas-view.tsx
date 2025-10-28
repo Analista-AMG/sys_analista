@@ -5,16 +5,15 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
-import { Calendar, Plus, Pencil, RefreshCw } from "lucide-react"
+import { Calendar, RefreshCw, X, Eye, Pencil, Trash2 } from "lucide-react"
 
 interface CampanasViewProps {
   subSection: string
 }
 
-interface Analista {
+interface PersonalData {
+  id: string
   fecha: string
   dni: string
   nombre_completo: string
@@ -27,9 +26,9 @@ interface Analista {
   condicion: string
   cargo: string
   sub_cargo: string
-  campana: string
-  estado: string
-  fecha_ingreso_campana: string
+  campaña: string
+  estado: "Activo" | "Inactivo" | "Licencia"
+  fecha_ingreso_campaña: string
   hora_entrada: string
   hora_salida: string
   supervisor: string
@@ -41,235 +40,314 @@ export function CampanasView({ subSection }: CampanasViewProps) {
   const [activeTab, setActiveTab] = useState("dia-actual")
   const [selectedDashboard, setSelectedDashboard] = useState("activaciones")
   const [nominaDate, setNominaDate] = useState("")
-
-  const [nomina, setNomina] = useState<Analista[]>([
+  const [personal, setPersonal] = useState<PersonalData[]>([
     {
-      fecha: "2024-01-14",
+      id: "1",
+      fecha: "2024-01-15",
       dni: "12345678",
-      nombre_completo: "María García López",
-      codigo_salesys: "SLS001",
-      codigo_genesys: "GNS001",
-      nombre_laraigo: "MGARCIA",
-      nombre_360: "MGARCIA360",
+      nombre_completo: "Juan Pérez García",
+      codigo_salesys: "SAL001",
+      codigo_genesys: "GEN001",
+      nombre_laraigo: "JPEREZ",
+      nombre_360: "JP001",
       codigo_navicat: "NAV001",
       codigo_ipcc: "IPCC001",
-      condicion: "Activo",
+      condicion: "Permanente",
       cargo: "Analista",
       sub_cargo: "Analista Senior",
-      campana: "Activaciones",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-06-15",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2023-01-15",
       hora_entrada: "08:00",
-      hora_salida: "16:00",
-      supervisor: "Juan Pérez",
-      asistencia_detalle: "Completo",
-      observacion: "Sin observaciones",
+      hora_salida: "17:00",
+      supervisor: "Carlos López",
+      asistencia_detalle: "Presente",
+      observacion: "Buen desempeño",
     },
     {
-      fecha: "2024-01-14",
+      id: "2",
+      fecha: "2024-01-15",
       dni: "87654321",
-      nombre_completo: "Carlos López Martínez",
-      codigo_salesys: "SLS002",
-      codigo_genesys: "GNS002",
-      nombre_laraigo: "CLOPEZ",
-      nombre_360: "CLOPEZ360",
+      nombre_completo: "María García López",
+      codigo_salesys: "SAL002",
+      codigo_genesys: "GEN002",
+      nombre_laraigo: "MGARCIA",
+      nombre_360: "MG001",
       codigo_navicat: "NAV002",
       codigo_ipcc: "IPCC002",
-      condicion: "Activo",
-      cargo: "Analista",
-      sub_cargo: "Analista Junior",
-      campana: "Activaciones",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-08-20",
-      hora_entrada: "08:00",
-      hora_salida: "16:00",
-      supervisor: "Juan Pérez",
-      asistencia_detalle: "Completo",
-      observacion: "",
+      condicion: "Permanente",
+      cargo: "Supervisor",
+      sub_cargo: "Supervisor de Equipo",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2022-06-20",
+      hora_entrada: "07:30",
+      hora_salida: "16:30",
+      supervisor: "Director",
+      asistencia_detalle: "Presente",
+      observacion: "Excelente liderazgo",
     },
     {
-      fecha: "2024-01-14",
-      dni: "23456789",
-      nombre_completo: "Ana Rodríguez Silva",
-      codigo_salesys: "SLS003",
-      codigo_genesys: "GNS003",
-      nombre_laraigo: "ARODRIGUEZ",
-      nombre_360: "ARODRIGUEZ360",
+      id: "3",
+      fecha: "2024-01-15",
+      dni: "11223344",
+      nombre_completo: "Pedro Rodríguez Martínez",
+      codigo_salesys: "SAL003",
+      codigo_genesys: "GEN003",
+      nombre_laraigo: "PRODRIGUEZ",
+      nombre_360: "PR001",
       codigo_navicat: "NAV003",
       codigo_ipcc: "IPCC003",
-      condicion: "Activo",
+      condicion: "Temporal",
       cargo: "Analista",
-      sub_cargo: "Analista Senior",
-      campana: "Delivery",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-05-10",
-      hora_entrada: "09:00",
+      sub_cargo: "Analista Junior",
+      campaña: "Activaciones",
+      estado: "Licencia",
+      fecha_ingreso_campaña: "2023-03-10",
+      hora_entrada: "08:00",
       hora_salida: "17:00",
-      supervisor: "María Torres",
-      asistencia_detalle: "Completo",
-      observacion: "Excelente desempeño",
+      supervisor: "Carlos López",
+      asistencia_detalle: "Licencia",
+      observacion: "En licencia médica",
     },
     {
-      fecha: "2024-01-14",
-      dni: "34567890",
-      nombre_completo: "Luis Fernández Castro",
-      codigo_salesys: "SLS004",
-      codigo_genesys: "GNS004",
-      nombre_laraigo: "LFERNANDEZ",
-      nombre_360: "LFERNANDEZ360",
+      id: "4",
+      fecha: "2024-01-15",
+      dni: "55667788",
+      nombre_completo: "Ana Martínez Sánchez",
+      codigo_salesys: "SAL004",
+      codigo_genesys: "GEN004",
+      nombre_laraigo: "AMARTINEZ",
+      nombre_360: "AM001",
       codigo_navicat: "NAV004",
       codigo_ipcc: "IPCC004",
-      condicion: "Activo",
+      condicion: "Permanente",
       cargo: "Analista",
-      sub_cargo: "Analista",
-      campana: "NPS",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-09-01",
+      sub_cargo: "Analista Senior",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2022-09-05",
       hora_entrada: "08:00",
-      hora_salida: "16:00",
-      supervisor: "Juan Pérez",
-      asistencia_detalle: "Completo",
-      observacion: "",
+      hora_salida: "17:00",
+      supervisor: "María García López",
+      asistencia_detalle: "Presente",
+      observacion: "Excelente productividad",
     },
     {
-      fecha: "2024-01-14",
-      dni: "45678901",
-      nombre_completo: "Patricia Morales Vega",
-      codigo_salesys: "SLS005",
-      codigo_genesys: "GNS005",
-      nombre_laraigo: "PMORALES",
-      nombre_360: "PMORALES360",
+      id: "5",
+      fecha: "2024-01-15",
+      dni: "99887766",
+      nombre_completo: "Luis Fernández Díaz",
+      codigo_salesys: "SAL005",
+      codigo_genesys: "GEN005",
+      nombre_laraigo: "LFERNANDEZ",
+      nombre_360: "LF001",
       codigo_navicat: "NAV005",
       codigo_ipcc: "IPCC005",
-      condicion: "Activo",
+      condicion: "Permanente",
       cargo: "Analista",
-      sub_cargo: "Analista Junior",
-      campana: "Activaciones",
-      estado: "Tardanza",
-      fecha_ingreso_campana: "2023-11-15",
-      hora_entrada: "08:30",
-      hora_salida: "16:30",
-      supervisor: "Juan Pérez",
-      asistencia_detalle: "Incompleto",
-      observacion: "Llegó 30 minutos tarde",
+      sub_cargo: "Analista Pleno",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2023-02-14",
+      hora_entrada: "08:00",
+      hora_salida: "17:00",
+      supervisor: "Carlos López",
+      asistencia_detalle: "Presente",
+      observacion: "Cumplimiento de metas",
     },
     {
-      fecha: "2024-01-14",
-      dni: "56789012",
-      nombre_completo: "Roberto Sánchez Díaz",
-      codigo_salesys: "SLS006",
-      codigo_genesys: "GNS006",
-      nombre_laraigo: "RSANCHEZ",
-      nombre_360: "RSANCHEZ360",
+      id: "6",
+      fecha: "2024-01-15",
+      dni: "44332211",
+      nombre_completo: "Carmen Ruiz Gómez",
+      codigo_salesys: "SAL006",
+      codigo_genesys: "GEN006",
+      nombre_laraigo: "CRUIZ",
+      nombre_360: "CR001",
       codigo_navicat: "NAV006",
       codigo_ipcc: "IPCC006",
-      condicion: "Activo",
-      cargo: "Analista",
-      sub_cargo: "Analista Senior",
-      campana: "MultiSkill",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-04-20",
-      hora_entrada: "07:00",
-      hora_salida: "15:00",
-      supervisor: "María Torres",
-      asistencia_detalle: "Completo",
-      observacion: "Turno madrugada",
-    },
-    {
-      fecha: "2024-01-14",
-      dni: "67890123",
-      nombre_completo: "Carmen Ruiz Herrera",
-      codigo_salesys: "SLS007",
-      codigo_genesys: "GNS007",
-      nombre_laraigo: "CRUIZ",
-      nombre_360: "CRUIZ360",
-      codigo_navicat: "NAV007",
-      codigo_ipcc: "IPCC007",
-      condicion: "Activo",
-      cargo: "Analista",
-      sub_cargo: "Analista",
-      campana: "Soporte Venta Fija",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-07-12",
-      hora_entrada: "10:00",
-      hora_salida: "18:00",
-      supervisor: "Carlos Mendoza",
-      asistencia_detalle: "Completo",
-      observacion: "",
-    },
-    {
-      fecha: "2024-01-14",
-      dni: "78901234",
-      nombre_completo: "Jorge Ramírez Ortiz",
-      codigo_salesys: "SLS008",
-      codigo_genesys: "GNS008",
-      nombre_laraigo: "JRAMIREZ",
-      nombre_360: "JRAMIREZ360",
-      codigo_navicat: "NAV008",
-      codigo_ipcc: "IPCC008",
-      condicion: "Activo",
+      condicion: "Temporal",
       cargo: "Analista",
       sub_cargo: "Analista Junior",
-      campana: "Validaciones",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-10-05",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2023-11-20",
       hora_entrada: "08:00",
-      hora_salida: "16:00",
-      supervisor: "Juan Pérez",
-      asistencia_detalle: "Completo",
-      observacion: "En capacitación",
+      hora_salida: "17:00",
+      supervisor: "María García López",
+      asistencia_detalle: "Presente",
+      observacion: "En período de prueba",
     },
     {
-      fecha: "2024-01-14",
-      dni: "89012345",
-      nombre_completo: "Laura Jiménez Flores",
-      codigo_salesys: "SLS009",
-      codigo_genesys: "GNS009",
-      nombre_laraigo: "LJIMENEZ",
-      nombre_360: "LJIMENEZ360",
-      codigo_navicat: "NAV009",
-      codigo_ipcc: "IPCC009",
-      condicion: "Activo",
+      id: "7",
+      fecha: "2024-01-15",
+      dni: "77665544",
+      nombre_completo: "Roberto Jiménez Flores",
+      codigo_salesys: "SAL007",
+      codigo_genesys: "GEN007",
+      nombre_laraigo: "RJIMENEZ",
+      nombre_360: "RJ001",
+      codigo_navicat: "NAV007",
+      codigo_ipcc: "IPCC007",
+      condicion: "Permanente",
+      cargo: "Coordinador",
+      sub_cargo: "Coordinador de Calidad",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2022-04-10",
+      hora_entrada: "07:30",
+      hora_salida: "16:30",
+      supervisor: "Director",
+      asistencia_detalle: "Presente",
+      observacion: "Responsable de auditorías",
+    },
+    {
+      id: "8",
+      fecha: "2024-01-15",
+      dni: "33221100",
+      nombre_completo: "Sofía Morales Castillo",
+      codigo_salesys: "SAL008",
+      codigo_genesys: "GEN008",
+      nombre_laraigo: "SMORALES",
+      nombre_360: "SM001",
+      codigo_navicat: "NAV008",
+      codigo_ipcc: "IPCC008",
+      condicion: "Permanente",
       cargo: "Analista",
       sub_cargo: "Analista Senior",
-      campana: "Foto Corporativo",
-      estado: "Permiso",
-      fecha_ingreso_campana: "2023-03-18",
+      campaña: "Activaciones",
+      estado: "Inactivo",
+      fecha_ingreso_campaña: "2021-08-15",
       hora_entrada: "08:00",
-      hora_salida: "16:00",
-      supervisor: "María Torres",
-      asistencia_detalle: "Parcial",
-      observacion: "Permiso médico por la tarde",
+      hora_salida: "17:00",
+      supervisor: "Carlos López",
+      asistencia_detalle: "Ausente",
+      observacion: "Suspensión temporal",
     },
     {
-      fecha: "2024-01-14",
-      dni: "90123456",
-      nombre_completo: "Diego Torres Mendoza",
-      codigo_salesys: "SLS010",
-      codigo_genesys: "GNS010",
-      nombre_laraigo: "DTORRES",
-      nombre_360: "DTORRES360",
+      id: "9",
+      fecha: "2024-01-15",
+      dni: "66554433",
+      nombre_completo: "Diego Vargas Romero",
+      codigo_salesys: "SAL009",
+      codigo_genesys: "GEN009",
+      nombre_laraigo: "DVARGAS",
+      nombre_360: "DV001",
+      codigo_navicat: "NAV009",
+      codigo_ipcc: "IPCC009",
+      condicion: "Temporal",
+      cargo: "Analista",
+      sub_cargo: "Analista Pleno",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2023-07-01",
+      hora_entrada: "08:00",
+      hora_salida: "17:00",
+      supervisor: "María García López",
+      asistencia_detalle: "Presente",
+      observacion: "Contrato por proyecto",
+    },
+    {
+      id: "10",
+      fecha: "2024-01-15",
+      dni: "22110099",
+      nombre_completo: "Valentina Soto Navarro",
+      codigo_salesys: "SAL010",
+      codigo_genesys: "GEN010",
+      nombre_laraigo: "VSOTO",
+      nombre_360: "VS001",
       codigo_navicat: "NAV010",
       codigo_ipcc: "IPCC010",
-      condicion: "Activo",
+      condicion: "Permanente",
       cargo: "Analista",
-      sub_cargo: "Analista",
-      campana: "Aghaso",
-      estado: "Presente",
-      fecha_ingreso_campana: "2023-08-30",
-      hora_entrada: "09:00",
+      sub_cargo: "Analista Junior",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2023-10-03",
+      hora_entrada: "08:00",
       hora_salida: "17:00",
-      supervisor: "Carlos Mendoza",
-      asistencia_detalle: "Completo",
-      observacion: "",
+      supervisor: "Carlos López",
+      asistencia_detalle: "Presente",
+      observacion: "Nuevo ingreso",
+    },
+    {
+      id: "11",
+      fecha: "2024-01-15",
+      dni: "88990011",
+      nombre_completo: "Javier Herrera Mendoza",
+      codigo_salesys: "SAL011",
+      codigo_genesys: "GEN011",
+      nombre_laraigo: "JHERRERA",
+      nombre_360: "JH001",
+      codigo_navicat: "NAV011",
+      codigo_ipcc: "IPCC011",
+      condicion: "Permanente",
+      cargo: "Analista",
+      sub_cargo: "Analista Senior",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2022-12-12",
+      hora_entrada: "08:00",
+      hora_salida: "17:00",
+      supervisor: "María García López",
+      asistencia_detalle: "Presente",
+      observacion: "Especialista en ventas",
+    },
+    {
+      id: "12",
+      fecha: "2024-01-15",
+      dni: "11009988",
+      nombre_completo: "Gabriela Ortiz Reyes",
+      codigo_salesys: "SAL012",
+      codigo_genesys: "GEN012",
+      nombre_laraigo: "GORTIZ",
+      nombre_360: "GO001",
+      codigo_navicat: "NAV012",
+      codigo_ipcc: "IPCC012",
+      condicion: "Temporal",
+      cargo: "Analista",
+      sub_cargo: "Analista Pleno",
+      campaña: "Activaciones",
+      estado: "Licencia",
+      fecha_ingreso_campaña: "2023-05-22",
+      hora_entrada: "08:00",
+      hora_salida: "17:00",
+      supervisor: "Carlos López",
+      asistencia_detalle: "Licencia",
+      observacion: "Licencia de maternidad",
+    },
+    {
+      id: "13",
+      fecha: "2024-01-15",
+      dni: "99001122",
+      nombre_completo: "Marcos Delgado Silva",
+      codigo_salesys: "SAL013",
+      codigo_genesys: "GEN013",
+      nombre_laraigo: "MDELGADO",
+      nombre_360: "MD001",
+      codigo_navicat: "NAV013",
+      codigo_ipcc: "IPCC013",
+      condicion: "Permanente",
+      cargo: "Analista",
+      sub_cargo: "Analista Junior",
+      campaña: "Activaciones",
+      estado: "Activo",
+      fecha_ingreso_campaña: "2023-09-18",
+      hora_entrada: "08:00",
+      hora_salida: "17:00",
+      supervisor: "María García López",
+      asistencia_detalle: "Presente",
+      observacion: "Buen potencial",
     },
   ])
-
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [editingIndex, setEditingIndex] = useState<number | null>(null)
-
-  const [formData, setFormData] = useState<Analista>({
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [showViewModal, setShowViewModal] = useState(false)
+  const [viewingPerson, setViewingPerson] = useState<PersonalData | null>(null)
+  const [formData, setFormData] = useState<PersonalData>({
+    id: "",
     fecha: "",
     dni: "",
     nombre_completo: "",
@@ -279,16 +357,16 @@ export function CampanasView({ subSection }: CampanasViewProps) {
     nombre_360: "",
     codigo_navicat: "",
     codigo_ipcc: "",
-    condicion: "Activo",
-    cargo: "Analista",
+    condicion: "",
+    cargo: "",
     sub_cargo: "",
-    campana: "",
-    estado: "Presente",
-    fecha_ingreso_campana: "",
+    campaña: "",
+    estado: "Activo",
+    fecha_ingreso_campaña: "",
     hora_entrada: "",
     hora_salida: "",
     supervisor: "",
-    asistencia_detalle: "Completo",
+    asistencia_detalle: "",
     observacion: "",
   })
 
@@ -302,13 +380,56 @@ export function CampanasView({ subSection }: CampanasViewProps) {
 
   const handleActualizar = () => {
     console.log("[v0] Actualizando nómina para la fecha:", nominaDate)
-    // Here you would typically fetch new data from the backend
   }
 
-  const handleAddAnalista = () => {
-    setNomina([...nomina, formData])
-    setIsAddDialogOpen(false)
+  const handleAddPersonal = () => {
     setFormData({
+      id: Date.now().toString(),
+      fecha: new Date().toISOString().split("T")[0],
+      dni: "",
+      nombre_completo: "",
+      codigo_salesys: "",
+      codigo_genesys: "",
+      nombre_laraigo: "",
+      nombre_360: "",
+      codigo_navicat: "",
+      codigo_ipcc: "",
+      condicion: "",
+      cargo: "",
+      sub_cargo: "",
+      campaña: "",
+      estado: "Activo",
+      fecha_ingreso_campaña: "",
+      hora_entrada: "",
+      hora_salida: "",
+      supervisor: "",
+      asistencia_detalle: "",
+      observacion: "",
+    })
+    setShowAddModal(true)
+  }
+
+  const handleEditPersonal = (person: PersonalData) => {
+    setFormData(person)
+    setEditingId(person.id)
+    setShowEditModal(true)
+  }
+
+  const handleViewPersonal = (person: PersonalData) => {
+    setViewingPerson(person)
+    setShowViewModal(true)
+  }
+
+  const handleSavePersonal = () => {
+    if (editingId) {
+      setPersonal(personal.map((p) => (p.id === editingId ? formData : p)))
+      setShowEditModal(false)
+    } else {
+      setPersonal([...personal, formData])
+      setShowAddModal(false)
+    }
+    setFormData({
+      id: "",
       fecha: "",
       dni: "",
       nombre_completo: "",
@@ -318,56 +439,26 @@ export function CampanasView({ subSection }: CampanasViewProps) {
       nombre_360: "",
       codigo_navicat: "",
       codigo_ipcc: "",
-      condicion: "Activo",
-      cargo: "Analista",
+      condicion: "",
+      cargo: "",
       sub_cargo: "",
-      campana: "",
-      estado: "Presente",
-      fecha_ingreso_campana: "",
+      campaña: "",
+      estado: "Activo",
+      fecha_ingreso_campaña: "",
       hora_entrada: "",
       hora_salida: "",
       supervisor: "",
-      asistencia_detalle: "Completo",
+      asistencia_detalle: "",
       observacion: "",
     })
   }
 
-  const handleEditAnalista = () => {
-    if (editingIndex !== null) {
-      const updatedNomina = [...nomina]
-      updatedNomina[editingIndex] = formData
-      setNomina(updatedNomina)
-      setIsEditDialogOpen(false)
-      setEditingIndex(null)
-      setFormData({
-        fecha: "",
-        dni: "",
-        nombre_completo: "",
-        codigo_salesys: "",
-        codigo_genesys: "",
-        nombre_laraigo: "",
-        nombre_360: "",
-        codigo_navicat: "",
-        codigo_ipcc: "",
-        condicion: "Activo",
-        cargo: "Analista",
-        sub_cargo: "",
-        campana: "",
-        estado: "Presente",
-        fecha_ingreso_campana: "",
-        hora_entrada: "",
-        hora_salida: "",
-        supervisor: "",
-        asistencia_detalle: "Completo",
-        observacion: "",
-      })
-    }
+  const handleDeletePersonal = (id: string) => {
+    setPersonal(personal.filter((p) => p.id !== id))
   }
 
-  const openEditDialog = (index: number) => {
-    setEditingIndex(index)
-    setFormData(nomina[index])
-    setIsEditDialogOpen(true)
+  const handleDownload = () => {
+    console.log("[v0] Descargando nómina de personal")
   }
 
   const renderCampanaContent = (campanaName: string) => {
@@ -387,7 +478,7 @@ export function CampanasView({ subSection }: CampanasViewProps) {
     }
 
     return (
-      <div className="p-6 overflow-x-hidden">
+      <div className="p-6 overflow-auto h-full">
         <Tabs defaultValue="dia-actual" className="w-full" onValueChange={setActiveTab}>
           <div className="flex justify-center mb-6">
             <TabsList className="w-[65%]">
@@ -488,15 +579,7 @@ export function CampanasView({ subSection }: CampanasViewProps) {
             </div>
 
             <Card className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-foreground">Nómina de Analistas</h3>
-                <Button onClick={() => setIsAddDialogOpen(true)} size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Agregar
-                </Button>
-              </div>
-
-              <div className="mb-6 flex items-end gap-3">
+              <div className="mb-6 flex items-end gap-3 justify-center">
                 <div className="flex-1 max-w-[300px]">
                   <label className="text-sm text-muted-foreground mb-2 block">Seleccionar Fecha</label>
                   <div className="relative">
@@ -514,286 +597,108 @@ export function CampanasView({ subSection }: CampanasViewProps) {
                   Actualizar
                 </Button>
               </div>
+            </Card>
 
-              <div className="w-full border rounded-lg overflow-hidden">
-                {/* Header - Fixed, no horizontal scroll */}
-                <div className="w-full overflow-hidden bg-background border-b border-border">
-                  <div className="w-full">
-                    <div className="flex border-b border-border">
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
-                      >
-                        Fecha
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
-                      >
-                        DNI
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "180px" }}
-                      >
-                        Nombre Completo
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Código SaleSys
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Código Genesys
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Nombre Laraigo
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Nombre 360
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Código Navicat
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Código IPCC
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
-                      >
-                        Condición
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
-                      >
-                        Cargo
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Sub Cargo
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Campaña
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
-                      >
-                        Estado
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "150px" }}
-                      >
-                        Fecha Ingreso Campaña
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
-                      >
-                        Hora Entrada
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "100px" }}
-                      >
-                        Hora Salida
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "120px" }}
-                      >
-                        Supervisor
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "140px" }}
-                      >
-                        Asistencia Detalle
-                      </div>
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "200px" }}
-                      >
-                        Observación
-                      </div>
-                      {/* Updated Actions column width */}
-                      <div
-                        className="py-3 px-4 text-sm font-semibold text-foreground whitespace-nowrap"
-                        style={{ width: "60px" }}
-                      >
-                        Acciones
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card className="p-4">
+                <p className="text-sm text-muted-foreground">Total Personal</p>
+                <p className="text-2xl font-bold text-foreground mt-2">{personal.length}</p>
+              </Card>
+              <Card className="p-4">
+                <p className="text-sm text-muted-foreground">Activos</p>
+                <p className="text-2xl font-bold text-foreground mt-2">
+                  {personal.filter((p) => p.estado === "Activo").length}
+                </p>
+              </Card>
+              <Card className="p-4">
+                <p className="text-sm text-muted-foreground">Inactivos</p>
+                <p className="text-2xl font-bold text-foreground mt-2">
+                  {personal.filter((p) => p.estado === "Inactivo").length}
+                </p>
+              </Card>
+              <Card className="p-4">
+                <p className="text-sm text-muted-foreground">En Licencia</p>
+                <p className="text-2xl font-bold text-foreground mt-2">
+                  {personal.filter((p) => p.estado === "Licencia").length}
+                </p>
+              </Card>
+            </div>
 
-                {/* Body - Scrollable both horizontally and vertically */}
-                <div className="w-full max-h-[500px] overflow-auto border-t border-border">
-                  <div className="w-full inline-block">
-                    {nomina.map((analista, i) => (
-                      <div key={i} className="flex border-b border-border hover:bg-secondary/50 transition-colors">
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "100px" }}
-                        >
-                          {analista.fecha}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "100px" }}
-                        >
-                          {analista.dni}
-                        </div>
-                        <div className="py-3 px-4 text-sm text-foreground whitespace-nowrap" style={{ width: "180px" }}>
-                          {analista.nombre_completo}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.codigo_salesys}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.codigo_genesys}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.nombre_laraigo}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.nombre_360}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.codigo_navicat}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.codigo_ipcc}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "100px" }}
-                        >
-                          {analista.condicion}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "100px" }}
-                        >
-                          {analista.cargo}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.sub_cargo}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.campana}
-                        </div>
-                        <div className="py-3 px-4 whitespace-nowrap" style={{ width: "100px" }}>
-                          <Badge variant={analista.estado === "Presente" ? "default" : "secondary"}>
-                            {analista.estado}
-                          </Badge>
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "150px" }}
-                        >
-                          {analista.fecha_ingreso_campana}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "100px" }}
-                        >
-                          {analista.hora_entrada}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "100px" }}
-                        >
-                          {analista.hora_salida}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "120px" }}
-                        >
-                          {analista.supervisor}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "140px" }}
-                        >
-                          {analista.asistencia_detalle}
-                        </div>
-                        <div
-                          className="py-3 px-4 text-sm text-muted-foreground whitespace-nowrap"
-                          style={{ width: "200px" }}
-                        >
-                          {analista.observacion || "-"}
-                        </div>
-                        <div className="py-3 px-4 whitespace-nowrap" style={{ width: "60px" }}>
-                          <Button variant="ghost" size="sm" onClick={() => openEditDialog(i)} className="h-8 w-8 p-0">
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <Card className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-foreground">Personal</h3>
+                <Button onClick={handleAddPersonal} size="sm">
+                  Agregar Personal
+                </Button>
               </div>
 
-              <div className="mt-6 flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
-                  Mostrando nómina del{" "}
-                  {new Date(nominaDate).toLocaleDateString("es-ES", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
-                <Button size="sm">Descargar Nómina</Button>
+              <div className="overflow-auto border rounded-lg max-h-[600px]">
+                <table className="w-full text-sm">
+                  <thead className="bg-secondary/50 border-b sticky top-0">
+                    <tr>
+                      <th className="px-4 py-2 text-left font-semibold">Nombre</th>
+                      <th className="px-4 py-2 text-left font-semibold">DNI</th>
+                      <th className="px-4 py-2 text-left font-semibold">Cargo</th>
+                      <th className="px-4 py-2 text-left font-semibold">Estado</th>
+                      <th className="px-4 py-2 text-left font-semibold">Fecha Ingreso</th>
+                      <th className="px-4 py-2 text-left font-semibold">Supervisor</th>
+                      <th className="px-4 py-2 text-center font-semibold">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {personal.map((person) => (
+                      <tr key={person.id} className="border-b hover:bg-secondary/30">
+                        <td className="px-4 py-2">{person.nombre_completo}</td>
+                        <td className="px-4 py-2">{person.dni}</td>
+                        <td className="px-4 py-2">{person.cargo}</td>
+                        <td className="px-4 py-2">
+                          <Badge
+                            variant={
+                              person.estado === "Activo"
+                                ? "default"
+                                : person.estado === "Inactivo"
+                                  ? "secondary"
+                                  : "outline"
+                            }
+                          >
+                            {person.estado}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-2">{person.fecha_ingreso_campaña}</td>
+                        <td className="px-4 py-2">{person.supervisor}</td>
+                        <td className="px-4 py-2 text-center space-x-2">
+                          <button
+                            onClick={() => handleViewPersonal(person)}
+                            className="inline-flex items-center justify-center h-8 w-8 rounded hover:bg-secondary/50 transition-colors"
+                            title="Visualizar"
+                          >
+                            <Eye className="h-4 w-4 text-foreground" />
+                          </button>
+                          <button
+                            onClick={() => handleEditPersonal(person)}
+                            className="inline-flex items-center justify-center h-8 w-8 rounded hover:bg-secondary/50 transition-colors"
+                            title="Editar"
+                          >
+                            <Pencil className="h-4 w-4 text-foreground" />
+                          </button>
+                          <button
+                            onClick={() => handleDeletePersonal(person.id)}
+                            className="inline-flex items-center justify-center h-8 w-8 rounded hover:bg-destructive/20 transition-colors"
+                            title="Eliminar"
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-4 flex justify-end">
+                <Button onClick={handleDownload} size="default">
+                  Descargar Nómina
+                </Button>
               </div>
             </Card>
           </TabsContent>
@@ -846,497 +751,559 @@ export function CampanasView({ subSection }: CampanasViewProps) {
           </TabsContent>
         </Tabs>
 
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Agregar Analista</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="fecha">Fecha</Label>
-                  <Input
-                    id="fecha"
-                    type="date"
-                    value={formData.fecha}
-                    onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
-                  />
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-semibold text-foreground">Editar Personal</h2>
+                  <Button onClick={() => setShowEditModal(false)} variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="dni">DNI</Label>
-                  <Input
-                    id="dni"
-                    value={formData.dni}
-                    onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
-                    placeholder="12345678"
-                  />
-                </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="nombre_completo">Nombre Completo</Label>
-                <Input
-                  id="nombre_completo"
-                  value={formData.nombre_completo}
-                  onChange={(e) => setFormData({ ...formData, nombre_completo: e.target.value })}
-                  placeholder="Nombre completo"
-                />
-              </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Fecha</label>
+                    <Input
+                      type="date"
+                      value={formData.fecha}
+                      onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">DNI</label>
+                    <Input value={formData.dni} onChange={(e) => setFormData({ ...formData, dni: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Nombre Completo</label>
+                    <Input
+                      value={formData.nombre_completo}
+                      onChange={(e) => setFormData({ ...formData, nombre_completo: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código SaleSys</label>
+                    <Input
+                      value={formData.codigo_salesys}
+                      onChange={(e) => setFormData({ ...formData, codigo_salesys: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código Genesys</label>
+                    <Input
+                      value={formData.codigo_genesys}
+                      onChange={(e) => setFormData({ ...formData, codigo_genesys: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Nombre Laraigo</label>
+                    <Input
+                      value={formData.nombre_laraigo}
+                      onChange={(e) => setFormData({ ...formData, nombre_laraigo: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Nombre 360</label>
+                    <Input
+                      value={formData.nombre_360}
+                      onChange={(e) => setFormData({ ...formData, nombre_360: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código Navicat</label>
+                    <Input
+                      value={formData.codigo_navicat}
+                      onChange={(e) => setFormData({ ...formData, codigo_navicat: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código IPCC</label>
+                    <Input
+                      value={formData.codigo_ipcc}
+                      onChange={(e) => setFormData({ ...formData, codigo_ipcc: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Condición</label>
+                    <Select
+                      value={formData.condicion}
+                      onValueChange={(value) => setFormData({ ...formData, condicion: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Permanente">Permanente</SelectItem>
+                        <SelectItem value="Temporal">Temporal</SelectItem>
+                        <SelectItem value="Contratista">Contratista</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Cargo</label>
+                    <Select
+                      value={formData.cargo}
+                      onValueChange={(value) => setFormData({ ...formData, cargo: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Analista">Analista</SelectItem>
+                        <SelectItem value="Supervisor">Supervisor</SelectItem>
+                        <SelectItem value="Coordinador">Coordinador</SelectItem>
+                        <SelectItem value="Gerente">Gerente</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Sub Cargo</label>
+                    <Select
+                      value={formData.sub_cargo}
+                      onValueChange={(value) => setFormData({ ...formData, sub_cargo: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Analista Junior">Analista Junior</SelectItem>
+                        <SelectItem value="Analista Pleno">Analista Pleno</SelectItem>
+                        <SelectItem value="Analista Senior">Analista Senior</SelectItem>
+                        <SelectItem value="Supervisor de Equipo">Supervisor de Equipo</SelectItem>
+                        <SelectItem value="Coordinador de Calidad">Coordinador de Calidad</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Campaña</label>
+                    <Select
+                      value={formData.campaña}
+                      onValueChange={(value) => setFormData({ ...formData, campaña: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Activaciones">Activaciones</SelectItem>
+                        <SelectItem value="Aghaso">Aghaso</SelectItem>
+                        <SelectItem value="Delivery">Delivery</SelectItem>
+                        <SelectItem value="Foto Corporativo">Foto Corporativo</SelectItem>
+                        <SelectItem value="Foto Alambrico">Foto Alambrico</SelectItem>
+                        <SelectItem value="NPS">NPS</SelectItem>
+                        <SelectItem value="MultiSkill">MultiSkill</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Estado</label>
+                    <Select
+                      value={formData.estado}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, estado: value as "Activo" | "Inactivo" | "Licencia" })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Activo">Activo</SelectItem>
+                        <SelectItem value="Inactivo">Inactivo</SelectItem>
+                        <SelectItem value="Licencia">Licencia</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Fecha Ingreso Campaña</label>
+                    <Input
+                      type="date"
+                      value={formData.fecha_ingreso_campaña}
+                      onChange={(e) => setFormData({ ...formData, fecha_ingreso_campaña: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Hora Entrada</label>
+                    <Input
+                      type="time"
+                      value={formData.hora_entrada}
+                      onChange={(e) => setFormData({ ...formData, hora_entrada: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Hora Salida</label>
+                    <Input
+                      type="time"
+                      value={formData.hora_salida}
+                      onChange={(e) => setFormData({ ...formData, hora_salida: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Supervisor</label>
+                    <Input
+                      value={formData.supervisor}
+                      onChange={(e) => setFormData({ ...formData, supervisor: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Asistencia Detalle</label>
+                    <Input
+                      value={formData.asistencia_detalle}
+                      onChange={(e) => setFormData({ ...formData, asistencia_detalle: e.target.value })}
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="text-sm text-muted-foreground mb-1 block">Observación</label>
+                    <Input
+                      value={formData.observacion}
+                      onChange={(e) => setFormData({ ...formData, observacion: e.target.value })}
+                    />
+                  </div>
+                </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="codigo_salesys">Código SaleSys</Label>
-                  <Input
-                    id="codigo_salesys"
-                    value={formData.codigo_salesys}
-                    onChange={(e) => setFormData({ ...formData, codigo_salesys: e.target.value })}
-                    placeholder="SLS001"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="codigo_genesys">Código Genesys</Label>
-                  <Input
-                    id="codigo_genesys"
-                    value={formData.codigo_genesys}
-                    onChange={(e) => setFormData({ ...formData, codigo_genesys: e.target.value })}
-                    placeholder="GNS001"
-                  />
+                <div className="mt-6 flex justify-end gap-2">
+                  <Button onClick={() => setShowEditModal(false)} variant="outline">
+                    Cancelar
+                  </Button>
+                  <Button onClick={handleSavePersonal}>Guardar Cambios</Button>
                 </div>
               </div>
+            </Card>
+          </div>
+        )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="nombre_laraigo">Nombre Laraigo</Label>
-                  <Input
-                    id="nombre_laraigo"
-                    value={formData.nombre_laraigo}
-                    onChange={(e) => setFormData({ ...formData, nombre_laraigo: e.target.value })}
-                    placeholder="USUARIO"
-                  />
+        {showAddModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-semibold text-foreground">Agregar Personal</h2>
+                  <Button onClick={() => setShowAddModal(false)} variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="nombre_360">Nombre 360</Label>
-                  <Input
-                    id="nombre_360"
-                    value={formData.nombre_360}
-                    onChange={(e) => setFormData({ ...formData, nombre_360: e.target.value })}
-                    placeholder="USUARIO360"
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="codigo_navicat">Código Navicat</Label>
-                  <Input
-                    id="codigo_navicat"
-                    value={formData.codigo_navicat}
-                    onChange={(e) => setFormData({ ...formData, codigo_navicat: e.target.value })}
-                    placeholder="NAV001"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Fecha</label>
+                    <Input
+                      type="date"
+                      value={formData.fecha}
+                      onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">DNI</label>
+                    <Input value={formData.dni} onChange={(e) => setFormData({ ...formData, dni: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Nombre Completo</label>
+                    <Input
+                      value={formData.nombre_completo}
+                      onChange={(e) => setFormData({ ...formData, nombre_completo: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código SaleSys</label>
+                    <Input
+                      value={formData.codigo_salesys}
+                      onChange={(e) => setFormData({ ...formData, codigo_salesys: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código Genesys</label>
+                    <Input
+                      value={formData.codigo_genesys}
+                      onChange={(e) => setFormData({ ...formData, codigo_genesys: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Nombre Laraigo</label>
+                    <Input
+                      value={formData.nombre_laraigo}
+                      onChange={(e) => setFormData({ ...formData, nombre_laraigo: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Nombre 360</label>
+                    <Input
+                      value={formData.nombre_360}
+                      onChange={(e) => setFormData({ ...formData, nombre_360: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código Navicat</label>
+                    <Input
+                      value={formData.codigo_navicat}
+                      onChange={(e) => setFormData({ ...formData, codigo_navicat: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Código IPCC</label>
+                    <Input
+                      value={formData.codigo_ipcc}
+                      onChange={(e) => setFormData({ ...formData, codigo_ipcc: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Condición</label>
+                    <Select
+                      value={formData.condicion}
+                      onValueChange={(value) => setFormData({ ...formData, condicion: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Permanente">Permanente</SelectItem>
+                        <SelectItem value="Temporal">Temporal</SelectItem>
+                        <SelectItem value="Contratista">Contratista</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Cargo</label>
+                    <Select
+                      value={formData.cargo}
+                      onValueChange={(value) => setFormData({ ...formData, cargo: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Analista">Analista</SelectItem>
+                        <SelectItem value="Supervisor">Supervisor</SelectItem>
+                        <SelectItem value="Coordinador">Coordinador</SelectItem>
+                        <SelectItem value="Gerente">Gerente</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Sub Cargo</label>
+                    <Select
+                      value={formData.sub_cargo}
+                      onValueChange={(value) => setFormData({ ...formData, sub_cargo: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Analista Junior">Analista Junior</SelectItem>
+                        <SelectItem value="Analista Pleno">Analista Pleno</SelectItem>
+                        <SelectItem value="Analista Senior">Analista Senior</SelectItem>
+                        <SelectItem value="Supervisor de Equipo">Supervisor de Equipo</SelectItem>
+                        <SelectItem value="Coordinador de Calidad">Coordinador de Calidad</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Campaña</label>
+                    <Select
+                      value={formData.campaña}
+                      onValueChange={(value) => setFormData({ ...formData, campaña: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Activaciones">Activaciones</SelectItem>
+                        <SelectItem value="Aghaso">Aghaso</SelectItem>
+                        <SelectItem value="Delivery">Delivery</SelectItem>
+                        <SelectItem value="Foto Corporativo">Foto Corporativo</SelectItem>
+                        <SelectItem value="Foto Alambrico">Foto Alambrico</SelectItem>
+                        <SelectItem value="NPS">NPS</SelectItem>
+                        <SelectItem value="MultiSkill">MultiSkill</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Estado</label>
+                    <Select
+                      value={formData.estado}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, estado: value as "Activo" | "Inactivo" | "Licencia" })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Activo">Activo</SelectItem>
+                        <SelectItem value="Inactivo">Inactivo</SelectItem>
+                        <SelectItem value="Licencia">Licencia</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Fecha Ingreso Campaña</label>
+                    <Input
+                      type="date"
+                      value={formData.fecha_ingreso_campaña}
+                      onChange={(e) => setFormData({ ...formData, fecha_ingreso_campaña: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Hora Entrada</label>
+                    <Input
+                      type="time"
+                      value={formData.hora_entrada}
+                      onChange={(e) => setFormData({ ...formData, hora_entrada: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Hora Salida</label>
+                    <Input
+                      type="time"
+                      value={formData.hora_salida}
+                      onChange={(e) => setFormData({ ...formData, hora_salida: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Supervisor</label>
+                    <Input
+                      value={formData.supervisor}
+                      onChange={(e) => setFormData({ ...formData, supervisor: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Asistencia Detalle</label>
+                    <Input
+                      value={formData.asistencia_detalle}
+                      onChange={(e) => setFormData({ ...formData, asistencia_detalle: e.target.value })}
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="text-sm text-muted-foreground mb-1 block">Observación</label>
+                    <Input
+                      value={formData.observacion}
+                      onChange={(e) => setFormData({ ...formData, observacion: e.target.value })}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="codigo_ipcc">Código IPCC</Label>
-                  <Input
-                    id="codigo_ipcc"
-                    value={formData.codigo_ipcc}
-                    onChange={(e) => setFormData({ ...formData, codigo_ipcc: e.target.value })}
-                    placeholder="IPCC001"
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="condicion">Condición</Label>
-                  <Select
-                    value={formData.condicion}
-                    onValueChange={(value) => setFormData({ ...formData, condicion: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Activo">Activo</SelectItem>
-                      <SelectItem value="Inactivo">Inactivo</SelectItem>
-                      <SelectItem value="Suspendido">Suspendido</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cargo">Cargo</Label>
-                  <Input
-                    id="cargo"
-                    value={formData.cargo}
-                    onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
-                    placeholder="Analista"
-                  />
+                <div className="mt-6 flex justify-end gap-2">
+                  <Button onClick={() => setShowAddModal(false)} variant="outline">
+                    Cancelar
+                  </Button>
+                  <Button onClick={handleSavePersonal}>Guardar Cambios</Button>
                 </div>
               </div>
+            </Card>
+          </div>
+        )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="sub_cargo">Sub Cargo</Label>
-                  <Input
-                    id="sub_cargo"
-                    value={formData.sub_cargo}
-                    onChange={(e) => setFormData({ ...formData, sub_cargo: e.target.value })}
-                    placeholder="Analista Senior"
-                  />
+        {showViewModal && viewingPerson && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-semibold text-foreground">Detalles del Personal</h2>
+                  <Button onClick={() => setShowViewModal(false)} variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="campana">Campaña</Label>
-                  <Input
-                    id="campana"
-                    value={formData.campana}
-                    onChange={(e) => setFormData({ ...formData, campana: e.target.value })}
-                    placeholder="Activaciones"
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="estado">Estado</Label>
-                  <Select
-                    value={formData.estado}
-                    onValueChange={(value) => setFormData({ ...formData, estado: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Presente">Presente</SelectItem>
-                      <SelectItem value="Ausente">Ausente</SelectItem>
-                      <SelectItem value="Tardanza">Tardanza</SelectItem>
-                      <SelectItem value="Permiso">Permiso</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Fecha</p>
+                    <p className="text-foreground font-medium">{viewingPerson.fecha}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">DNI</p>
+                    <p className="text-foreground font-medium">{viewingPerson.dni}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nombre Completo</p>
+                    <p className="text-foreground font-medium">{viewingPerson.nombre_completo}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Código SaleSys</p>
+                    <p className="text-foreground font-medium">{viewingPerson.codigo_salesys}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Código Genesys</p>
+                    <p className="text-foreground font-medium">{viewingPerson.codigo_genesys}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nombre Laraigo</p>
+                    <p className="text-foreground font-medium">{viewingPerson.nombre_laraigo}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Nombre 360</p>
+                    <p className="text-foreground font-medium">{viewingPerson.nombre_360}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Código Navicat</p>
+                    <p className="text-foreground font-medium">{viewingPerson.codigo_navicat}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Código IPCC</p>
+                    <p className="text-foreground font-medium">{viewingPerson.codigo_ipcc}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Condición</p>
+                    <p className="text-foreground font-medium">{viewingPerson.condicion}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Cargo</p>
+                    <p className="text-foreground font-medium">{viewingPerson.cargo}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Sub Cargo</p>
+                    <p className="text-foreground font-medium">{viewingPerson.sub_cargo}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Campaña</p>
+                    <p className="text-foreground font-medium">{viewingPerson.campaña}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Estado</p>
+                    <Badge
+                      variant={
+                        viewingPerson.estado === "Activo"
+                          ? "default"
+                          : viewingPerson.estado === "Inactivo"
+                            ? "secondary"
+                            : "outline"
+                      }
+                    >
+                      {viewingPerson.estado}
+                    </Badge>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Fecha Ingreso Campaña</p>
+                    <p className="text-foreground font-medium">{viewingPerson.fecha_ingreso_campaña}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Hora Entrada</p>
+                    <p className="text-foreground font-medium">{viewingPerson.hora_entrada}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Hora Salida</p>
+                    <p className="text-foreground font-medium">{viewingPerson.hora_salida}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Supervisor</p>
+                    <p className="text-foreground font-medium">{viewingPerson.supervisor}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Asistencia Detalle</p>
+                    <p className="text-foreground font-medium">{viewingPerson.asistencia_detalle}</p>
+                  </div>
+                  <div className="md:col-span-2">
+                    <p className="text-sm text-muted-foreground">Observación</p>
+                    <p className="text-foreground font-medium">{viewingPerson.observacion}</p>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="fecha_ingreso_campana">Fecha Ingreso Campaña</Label>
-                  <Input
-                    id="fecha_ingreso_campana"
-                    type="date"
-                    value={formData.fecha_ingreso_campana}
-                    onChange={(e) => setFormData({ ...formData, fecha_ingreso_campana: e.target.value })}
-                  />
-                </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="hora_entrada">Hora Entrada</Label>
-                  <Input
-                    id="hora_entrada"
-                    type="time"
-                    value={formData.hora_entrada}
-                    onChange={(e) => setFormData({ ...formData, hora_entrada: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="hora_salida">Hora Salida</Label>
-                  <Input
-                    id="hora_salida"
-                    type="time"
-                    value={formData.hora_salida}
-                    onChange={(e) => setFormData({ ...formData, hora_salida: e.target.value })}
-                  />
+                <div className="mt-6 flex justify-end gap-2">
+                  <Button onClick={() => setShowViewModal(false)} variant="outline">
+                    Cerrar
+                  </Button>
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="supervisor">Supervisor</Label>
-                  <Input
-                    id="supervisor"
-                    value={formData.supervisor}
-                    onChange={(e) => setFormData({ ...formData, supervisor: e.target.value })}
-                    placeholder="Nombre del supervisor"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="asistencia_detalle">Asistencia Detalle</Label>
-                  <Select
-                    value={formData.asistencia_detalle}
-                    onValueChange={(value) => setFormData({ ...formData, asistencia_detalle: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Completo">Completo</SelectItem>
-                      <SelectItem value="Incompleto">Incompleto</SelectItem>
-                      <SelectItem value="Parcial">Parcial</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="observacion">Observación</Label>
-                <Input
-                  id="observacion"
-                  value={formData.observacion}
-                  onChange={(e) => setFormData({ ...formData, observacion: e.target.value })}
-                  placeholder="Observaciones adicionales"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleAddAnalista}>Agregar</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Editar Analista</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-fecha">Fecha</Label>
-                  <Input
-                    id="edit-fecha"
-                    type="date"
-                    value={formData.fecha}
-                    onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-dni">DNI</Label>
-                  <Input
-                    id="edit-dni"
-                    value={formData.dni}
-                    onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
-                    placeholder="12345678"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="edit-nombre_completo">Nombre Completo</Label>
-                <Input
-                  id="edit-nombre_completo"
-                  value={formData.nombre_completo}
-                  onChange={(e) => setFormData({ ...formData, nombre_completo: e.target.value })}
-                  placeholder="Nombre completo"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-codigo_salesys">Código SaleSys</Label>
-                  <Input
-                    id="edit-codigo_salesys"
-                    value={formData.codigo_salesys}
-                    onChange={(e) => setFormData({ ...formData, codigo_salesys: e.target.value })}
-                    placeholder="SLS001"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-codigo_genesys">Código Genesys</Label>
-                  <Input
-                    id="edit-codigo_genesys"
-                    value={formData.codigo_genesys}
-                    onChange={(e) => setFormData({ ...formData, codigo_genesys: e.target.value })}
-                    placeholder="GNS001"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-nombre_laraigo">Nombre Laraigo</Label>
-                  <Input
-                    id="edit-nombre_laraigo"
-                    value={formData.nombre_laraigo}
-                    onChange={(e) => setFormData({ ...formData, nombre_laraigo: e.target.value })}
-                    placeholder="USUARIO"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-nombre_360">Nombre 360</Label>
-                  <Input
-                    id="edit-nombre_360"
-                    value={formData.nombre_360}
-                    onChange={(e) => setFormData({ ...formData, nombre_360: e.target.value })}
-                    placeholder="USUARIO360"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-codigo_navicat">Código Navicat</Label>
-                  <Input
-                    id="edit-codigo_navicat"
-                    value={formData.codigo_navicat}
-                    onChange={(e) => setFormData({ ...formData, codigo_navicat: e.target.value })}
-                    placeholder="NAV001"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-codigo_ipcc">Código IPCC</Label>
-                  <Input
-                    id="edit-codigo_ipcc"
-                    value={formData.codigo_ipcc}
-                    onChange={(e) => setFormData({ ...formData, codigo_ipcc: e.target.value })}
-                    placeholder="IPCC001"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-condicion">Condición</Label>
-                  <Select
-                    value={formData.condicion}
-                    onValueChange={(value) => setFormData({ ...formData, condicion: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Activo">Activo</SelectItem>
-                      <SelectItem value="Inactivo">Inactivo</SelectItem>
-                      <SelectItem value="Suspendido">Suspendido</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-cargo">Cargo</Label>
-                  <Input
-                    id="edit-cargo"
-                    value={formData.cargo}
-                    onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
-                    placeholder="Analista"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-sub_cargo">Sub Cargo</Label>
-                  <Input
-                    id="edit-sub_cargo"
-                    value={formData.sub_cargo}
-                    onChange={(e) => setFormData({ ...formData, sub_cargo: e.target.value })}
-                    placeholder="Analista Senior"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-campana">Campaña</Label>
-                  <Input
-                    id="edit-campana"
-                    value={formData.campana}
-                    onChange={(e) => setFormData({ ...formData, campana: e.target.value })}
-                    placeholder="Activaciones"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-estado">Estado</Label>
-                  <Select
-                    value={formData.estado}
-                    onValueChange={(value) => setFormData({ ...formData, estado: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Presente">Presente</SelectItem>
-                      <SelectItem value="Ausente">Ausente</SelectItem>
-                      <SelectItem value="Tardanza">Tardanza</SelectItem>
-                      <SelectItem value="Permiso">Permiso</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-fecha_ingreso_campana">Fecha Ingreso Campaña</Label>
-                  <Input
-                    id="edit-fecha_ingreso_campana"
-                    type="date"
-                    value={formData.fecha_ingreso_campana}
-                    onChange={(e) => setFormData({ ...formData, fecha_ingreso_campana: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-hora_entrada">Hora Entrada</Label>
-                  <Input
-                    id="edit-hora_entrada"
-                    type="time"
-                    value={formData.hora_entrada}
-                    onChange={(e) => setFormData({ ...formData, hora_entrada: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-hora_salida">Hora Salida</Label>
-                  <Input
-                    id="edit-hora_salida"
-                    type="time"
-                    value={formData.hora_salida}
-                    onChange={(e) => setFormData({ ...formData, hora_salida: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="edit-supervisor">Supervisor</Label>
-                  <Input
-                    id="edit-supervisor"
-                    value={formData.supervisor}
-                    onChange={(e) => setFormData({ ...formData, supervisor: e.target.value })}
-                    placeholder="Nombre del supervisor"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="edit-asistencia_detalle">Asistencia Detalle</Label>
-                  <Select
-                    value={formData.asistencia_detalle}
-                    onValueChange={(value) => setFormData({ ...formData, asistencia_detalle: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Completo">Completo</SelectItem>
-                      <SelectItem value="Incompleto">Incompleto</SelectItem>
-                      <SelectItem value="Parcial">Parcial</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="edit-observacion">Observación</Label>
-                <Input
-                  id="edit-observacion"
-                  value={formData.observacion}
-                  onChange={(e) => setFormData({ ...formData, observacion: e.target.value })}
-                  placeholder="Observaciones adicionales"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleEditAnalista}>Guardar Cambios</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </Card>
+          </div>
+        )}
       </div>
     )
   }
