@@ -58,7 +58,7 @@ export function MainContent({
   if (!activeSection || !activeSubSection) {
     return (
       <main className="flex-1 flex flex-col bg-background">
-        <InicioView subSection="main" />
+        <InicioView subSection="main"  onOpenCampaign={onOpenCampaign}/>
       </main>
     )
   }
