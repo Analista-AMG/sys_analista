@@ -110,7 +110,7 @@ export function Sidebar({ activeSection, activeSubSection, onNavigate }: Sidebar
             return (
               <div key={item.id}>
                 <button
-                  onClick={() => toggleSection(item.id)}
+                  onClick={() => {if(item.id === "inicio") {onNavigate("inicio", "main")} else {toggleSection(item.id)}}}
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                     isSectionActive

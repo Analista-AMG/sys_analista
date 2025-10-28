@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { MainContent } from "@/components/main-content"
+import { InicioView } from "./views/inicio-view"
+import { Section } from "lucide-react"
 
 export function CallCenterLayout() {
   const [activeSection, setActiveSection] = useState<string | null>(null)
@@ -12,28 +14,21 @@ export function CallCenterLayout() {
   const handleNavigate = (section: string, subSection: string) => {
     // For inicio, we don't use subsections
     if (section === "inicio") {
+      setOpenTabs([])
       setActiveSection(section)
       setActiveSubSection("main")
-
-      const tabId = `${section}-main`
-      const existingTab = openTabs.find((tab) => tab.id === tabId)
-
-      if (!existingTab) {
-        setOpenTabs([...openTabs, { section, subSection: "main", id: tabId }])
-      }
       return
     }
 
-    const tabId = `${section}-${subSection}`
-    const existingTab = openTabs.find((tab) => tab.id === tabId)
+      const tabId = `${section}-${subSection}`
+      const existingTab = openTabs.find((tab) => tab.id === tabId)
 
-    if (!existingTab) {
-      setOpenTabs([...openTabs, { section, subSection, id: tabId }])
-    }
-
-    setActiveSection(section)
-    setActiveSubSection(subSection)
-  }
+      if (!existingTab) {
+        setOpenTabs([...openTabs, { section, subSection, id: tabId }])
+      }
+      setActiveSection(section)
+      setActiveSubSection(subSection)
+  } 
 
   const handleCloseTab = (tabId: string) => {
     const updatedTabs = openTabs.filter((tab) => tab.id !== tabId)
@@ -46,8 +41,8 @@ export function CallCenterLayout() {
         setActiveSection(lastTab.section)
         setActiveSubSection(lastTab.subSection)
       } else {
-        setActiveSection(null)
-        setActiveSubSection(null)
+        setActiveSection("inicio")
+        setActiveSubSection("main")
       }
     }
   }
