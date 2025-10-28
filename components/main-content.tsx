@@ -57,11 +57,8 @@ export function MainContent({
 }: MainContentProps) {
   if (!activeSection || !activeSubSection) {
     return (
-      <main className="flex-1 flex items-center justify-center bg-background">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-foreground mb-2">Bienvenido a Sys-Analistas</h2>
-          <p className="text-muted-foreground">Selecciona una opción del menú lateral para comenzar</p>
-        </div>
+      <main className="flex-1 flex flex-col bg-background">
+        <InicioView subSection="main" />
       </main>
     )
   }
